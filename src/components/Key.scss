@@ -1,0 +1,17 @@
+
+.key {
+  display: flex;
+  justify-content: center;
+  align-items: self-end;
+  font-family: "Satoshi", sans-serif;
+  font-size: 1.1em;
+  border: 1px solid #fff;
+  border-radius: 7px;
+  color: white;
+  width: 25px;
+  height: 22px;
+  margin-top: .5em;
+  padding-bottom: 3px;
+  user-select: none;
+  opacity: .6;
+}

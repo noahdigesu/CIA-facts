@@ -1,6 +1,7 @@
 import "./Feedback.scss";
 import {useHotkeys} from "react-hotkeys-hook";
 import {animate} from "framer-motion";
+import Key from "../Key.tsx";
 
 function Feedback({type, enabled}) {
     useHotkeys(type === "check" ? 'e' : 'q', () => animateCheck());
@@ -10,14 +11,17 @@ function Feedback({type, enabled}) {
         animate(
             ".enabled",
             {scale: [.8, 1]},
-            {type: "spring", mass: .5 , duration: 1}
+            {type: "spring", mass: .5, duration: 1}
         );
     }
 
     return (
-        <span onMouseDown={animateCheck} className={`checkmark ${enabled ? "enabled" : ""}`}>
-            {type === "check" ? "✅" : "❌"}
-        </span>
+        <div className={"checkmark-wrapper"}>
+            <span onMouseDown={animateCheck} className={`checkmark ${enabled ? "enabled" : ""}`}>
+                {type === "check" ? "✅" : "❌"}
+            </span>
+            <Key letter={type === "check" ? "e" : "q"}/>
+        </div>
     );
 }
 

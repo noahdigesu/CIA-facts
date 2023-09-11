@@ -3,6 +3,7 @@ import "./Arrow.scss";
 import {ArrowLeft, ArrowRight} from 'react-feather';
 import {animate, motion} from "framer-motion";
 import {useHotkeys} from "react-hotkeys-hook";
+import Key from "../Key.tsx";
 
 function Arrow({direction}) {
     useHotkeys('d', () => animateArrow("right"));
@@ -17,12 +18,15 @@ function Arrow({direction}) {
     }
 
     return (
-        <motion.span className={`arrow ${direction}`}
-                     onMouseDown={() => animateArrow(direction)}>
-            {direction === "left" ? (
-                <ArrowLeft id={"arrow_left"}/>
-            ) : <ArrowRight id={"arrow_right"}/>}
-        </motion.span>
+        <div className={`arrow-wrapper ${direction}`}>
+            <motion.span className={`arrow`}
+                         onMouseDown={() => animateArrow(direction)}>
+                {direction === "left" ? (
+                    <ArrowLeft id={"arrow_left"}/>
+                ) : <ArrowRight id={"arrow_right"}/>}
+            </motion.span>
+            <Key letter={direction === "left"? "a" : "d"}/>
+        </div>
     );
 }
 

@@ -1,8 +1,5 @@
 import "./Starred.scss";
 import {animate, motion} from "framer-motion";
-import {useHotkeys} from 'react-hotkeys-hook';
-
-import {Star} from 'react-feather';
 
 function Starred({toggled}) {
     useHotkeys('s', () => animateStar());
@@ -16,11 +13,19 @@ function Starred({toggled}) {
     }
 
     return (
-        <motion.span id={"star"}
-                     onMouseDown={animateStar}>
-            <Star className={toggled ? "toggled" : ""}/>
-        </motion.span>
+        <span id={"star-wrapper"}>
+            <motion.span id={"star"}
+                         onMouseDown={animateStar}>
+                <Star className={toggled ? "toggled" : ""}/>
+            </motion.span>
+            <Key letter={"s"}/>
+        </span>
     );
 }
+
+import {useHotkeys} from 'react-hotkeys-hook';
+import {Star} from 'react-feather';
+
+import Key from "../Key.tsx";
 
 export default Starred;
