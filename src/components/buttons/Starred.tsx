@@ -11,12 +11,13 @@ function Starred({toggled}) {
         animate(
             "#star",
             {scale: [.8, 1]},
-            {type: "spring", mass: .5 , duration: 1}
+            {type: "spring", mass: .5, duration: 1}
         );
     }
 
     return (
-        <motion.span id={"star"} onMouseDown={animateStar}>
+        <motion.span id={"star"}
+                     onMouseDown={animateStar}>
             <Star className={toggled ? "toggled" : ""}/>
         </motion.span>
     );

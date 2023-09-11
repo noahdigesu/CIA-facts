@@ -1,15 +1,19 @@
 .arrow {
-  font-size: 2em;
   position: absolute;
   top: 50%;
   transform: translate3d(0, -50%, 0);
   cursor: pointer;
+
+  svg {
+    width: 2em;
+    height: 2em;
+  }
 }
 
 .left {
-  left: 20px;
+  left: 40px;
 }
 
 .right {
-  right: 20px;
+  right: 40px;
 }

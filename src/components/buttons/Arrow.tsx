@@ -1,14 +1,16 @@
 import "./Arrow.scss";
 
-import {ArrowRight, ArrowLeft} from 'react-feather';
+import {ArrowLeft, ArrowRight} from 'react-feather';
+import {motion} from "framer-motion";
 
 function Arrow({direction}) {
+
     return (
-        <span className={`arrow ${direction}`}>
+        <motion.span className={`arrow ${direction}`}>
             {direction === "left" ? (
                 <ArrowLeft/>
             ) : <ArrowRight/>}
-        </span>
+        </motion.span>
     );
 }
 

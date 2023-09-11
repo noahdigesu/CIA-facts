@@ -1,5 +1,6 @@
 import {useState} from 'react'
 import {useHotkeys} from 'react-hotkeys-hook'
+import { useLocalStorage } from "@uidotdev/usehooks";
 
 import './App.scss'
 
@@ -9,6 +10,7 @@ import Feedback from "./components/buttons/Feedback.tsx";
 import Arrow from "./components/buttons/Arrow.tsx";
 
 import questions from '../public/q-a.json';
+import Timeline from "./components/Timeline.tsx";
 
 function App() {
     const enum QUESTION_TYPE {
@@ -18,9 +20,9 @@ function App() {
 
     const [questionNumber, setQuestionNumber] = useState(0);
     const [type, setType] = useState(QUESTION_TYPE.question);
-    const [starredQuestions, setStarredQuestions] = useState([]);
-    const [passedQuestions, setPassedQuestions] = useState([]);
-    const [failedQuestions, setFailedQuestions] = useState([]);
+    const [starredQuestions, setStarredQuestions] = useLocalStorage("starredQuestions", []);
+    const [passedQuestions, setPassedQuestions] = useLocalStorage("passedQuestions", []);
+    const [failedQuestions, setFailedQuestions] = useLocalStorage("failedQuestions", []);
 
     // Next question
     useHotkeys('d', () => switchQuestion("next"));
@@ -118,7 +120,7 @@ function App() {
             <span onMouseDown={() => switchQuestion("next")}>
                 <Arrow direction={"right"}/>
             </span>
-            {/*<Timeline/>*/}
+            <Timeline/>
         </>
     )
 }
