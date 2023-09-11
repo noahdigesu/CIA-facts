@@ -5,7 +5,7 @@ import {useState} from "react";
 
 function Starred({toggled}) {
     return (
-        <span>
+        <span id={"star"}>
             <Star className={toggled ? "toggled" : ""}/>
         </span>
     );
