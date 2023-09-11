@@ -16,7 +16,7 @@ function Feedback({type, enabled}) {
     }
 
     return (
-        <div className={"checkmark-wrapper"}>
+        <div className={`checkmark-wrapper ${type}`}>
             <span onMouseDown={animateCheck} className={`checkmark ${enabled ? "enabled" : ""}`}>
                 {type === "check" ? "✅" : "❌"}
             </span>

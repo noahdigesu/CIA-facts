@@ -109,7 +109,13 @@ function App() {
 
     return (
         <>
-            <span onMouseDown={() => toggleStarred()}>
+            <span onMouseDown={() => toggleStarred()}
+                  onMouseEnter={() => {
+                      animate("#star-wrapper .key", {y: [-5, 0], opacity: .6}, {})
+                  }}
+                  onMouseLeave={() => {
+                      animate("#star-wrapper .key", {y: [0, -5], opacity: 0}, {})
+                  }}>
                 <Starred toggled={starredQuestions.includes(questionNumber)}/>
             </span>
             <div className={"content-wrapper"}>
@@ -117,25 +123,49 @@ function App() {
                     <Title value={questions[questionNumber][type]} type={type}/>
                     {type === "answer" ? (
                         <div className={"feedback"}>
-                        <span onMouseDown={() => toggleFailed()}>
-                            <Feedback type={"cross"}
-                                      enabled={failedQuestions.includes(questionNumber)}/>
-                        </span>
-                            <span onMouseDown={() => togglePassed()}>
-                            <Feedback type={"check"}
-                                      enabled={passedQuestions.includes(questionNumber)}/>
-                        </span>
+                            <span onMouseDown={() => toggleFailed()}
+                                  onMouseEnter={() => {
+                                      animate(".checkmark-wrapper.cross .key", {y: [-5, 0], opacity: .6}, {})
+                                  }}
+                                  onMouseLeave={() => {
+                                      animate(".checkmark-wrapper.cross .key", {y: [0, -5], opacity: 0}, {})
+                                  }}>
+                                <Feedback type={"cross"}
+                                          enabled={failedQuestions.includes(questionNumber)}/>
+                            </span>
+                            <span onMouseDown={() => togglePassed()}
+                                  onMouseEnter={() => {
+                                      animate(".checkmark-wrapper.check .key", {y: [-5, 0], opacity: .6}, {})
+                                  }}
+                                  onMouseLeave={() => {
+                                      animate(".checkmark-wrapper.check .key", {y: [0, -5], opacity: 0}, {})
+                                  }}>
+                                <Feedback type={"check"}
+                                          enabled={passedQuestions.includes(questionNumber)}/>
+                            </span>
                         </div>
                     ) : (<></>)}
                 </div>
             </div>
             {!(questionNumber === 0 && type === QUESTION_TYPE.question) ? (
-                <span onMouseDown={() => switchQuestion("previous")}>
+                <span onMouseDown={() => switchQuestion("previous")}
+                      onMouseEnter={() => {
+                          animate(".arrow-wrapper.left .key", {y: [-5, 0], opacity: .6}, {})
+                      }}
+                      onMouseLeave={() => {
+                          animate(".arrow-wrapper.left .key", {y: [0, -5], opacity: 0}, {})
+                      }}>
                     <Arrow direction={"left"}/>
                 </span>
             ) : (<></>)}
-            {!(questionNumber === questions.length - 1  && type === QUESTION_TYPE.answer) ? (
-                <span onMouseDown={() => switchQuestion("next")}>
+            {!(questionNumber === questions.length - 1 && type === QUESTION_TYPE.answer) ? (
+                <span onMouseDown={() => switchQuestion("next")}
+                      onMouseEnter={() => {
+                          animate(".arrow-wrapper.right .key", {y: [-5, 0], opacity: .6}, {})
+                      }}
+                      onMouseLeave={() => {
+                          animate(".arrow-wrapper.right .key", {y: [0, -5], opacity: 0}, {})
+                      }}>
                     <Arrow direction={"right"}/>
                 </span>
             ) : (<></>)}
