@@ -32,18 +32,6 @@
     border-radius: 100%;
   }
 
-  &.previous {
-    border: 1px solid #fff;
-
-    &.passed {
-      border: 1px solid #13F287;
-    }
-
-    &.failed {
-      border: 1px solid #FF4D4D;
-    }
-  }
-
   &.current {
     border: 1px solid #fff;
     background-color: #fff;
@@ -56,6 +44,11 @@
     &.failed {
       border: 1px solid #FF4D4D;
       background-color: #FF4D4D;
+    }
+
+    &.starred {
+      border: 1px solid #FFE073;
+      background-color: #FFE073;
     }
   }
 }

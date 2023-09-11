@@ -44,6 +44,10 @@ function App() {
     useHotkeys('q', () => toggleFailed());
     // Clear all tags
     useHotkeys('c', () => clear());
+    // Go to first question
+    useHotkeys('home', () => goToQuestion(0));
+    // Go to last question
+    useHotkeys('end', () => goToQuestion(questions.length - 1));
 
     function switchQuestion(switchType) {
         // Check if we're switching from a question to an answer
@@ -62,6 +66,11 @@ function App() {
             setQuestionNumber(questionNumber - 1);
         if (switchType === "next" && type === QUESTION_TYPE.answer && questionNumber < questions.length - 1)
             setQuestionNumber(questionNumber + 1);
+    }
+
+    function goToQuestion(n) {
+        setQuestionNumber(n);
+        setType(QUESTION_TYPE.question);
     }
 
     function toggleStarred() {

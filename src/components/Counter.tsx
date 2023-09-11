@@ -1,5 +1,4 @@
 import "./Counter.scss";
-import questions from "../../public/q-a.json";
 
 function Counter({questionNumber, questionAmount}) {
     return (
