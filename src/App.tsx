@@ -22,14 +22,15 @@ function App() {
     const [failedQuestions, setFailedQuestions] = useState([]);
 
     // Next question
-    useHotkeys('d', () => {
-        switchQuestion("next");
-    });
-
+    useHotkeys('d', () => switchQuestion("next"));
     // Previous question
-    useHotkeys('a', () => {
-        switchQuestion("previous");
-    });
+    useHotkeys('a', () => switchQuestion("previous"));
+    // Starring
+    useHotkeys('s', () => toggleStarred());
+    // Mark as passed
+    useHotkeys('e', () => togglePassed());
+    // Mark as failed
+    useHotkeys('q', () => toggleFailed());
 
     function switchQuestion(switchType) {
         // Check if we're switching from a question to an answer
@@ -52,8 +53,7 @@ function App() {
         }
     }
 
-    // Starring
-    useHotkeys('s', () => {
+    function toggleStarred() {
         if (!starredQuestions.includes(questionNumber)) {
             // Add to starred
             setStarredQuestions([...starredQuestions, questionNumber]);
@@ -61,22 +61,9 @@ function App() {
             // Remove from starred
             setStarredQuestions(starredQuestions.filter(item => item !== questionNumber));
         }
-    });
+    }
 
-    useHotkeys('e', () => {
-        // reset
-        setFailedQuestions(failedQuestions.filter(item => item !== questionNumber));
-        if (!passedQuestions.includes(questionNumber)) {
-            // Add to starred
-            setPassedQuestions([...passedQuestions, questionNumber]);
-        } else {
-            // Remove from starred
-            setPassedQuestions(passedQuestions.filter(item => item !== questionNumber));
-        }
-        console.log("Passed?", passedQuestions.includes(questionNumber));
-    });
-
-    useHotkeys('q', () => {
+    function toggleFailed() {
         // reset
         setPassedQuestions(passedQuestions.filter(item => item !== questionNumber));
         if (!failedQuestions.includes(questionNumber)) {
@@ -86,18 +73,37 @@ function App() {
             // Remove from starred
             setFailedQuestions(failedQuestions.filter(item => item !== questionNumber));
         }
-        console.log("Failed?", failedQuestions.includes(questionNumber));
-    });
+    }
+
+    function togglePassed() {
+        // reset
+        setFailedQuestions(failedQuestions.filter(item => item !== questionNumber));
+        if (!passedQuestions.includes(questionNumber)) {
+            // Add to starred
+            setPassedQuestions([...passedQuestions, questionNumber]);
+        } else {
+            // Remove from starred
+            setPassedQuestions(passedQuestions.filter(item => item !== questionNumber));
+        }
+    }
 
     return (
         <>
-            <Starred toggled={starredQuestions.includes(questionNumber)}/>
+            <span onMouseDown={() => toggleStarred()}>
+                <Starred toggled={starredQuestions.includes(questionNumber)}/>
+            </span>
             <div className={"content"}>
                 <Title value={questions[questionNumber][type]} type={type}/>
                 {type === "answer" ? (
                     <div className={"feedback"}>
-                        <Feedback type={"cross"} enabled={failedQuestions.includes(questionNumber)}/>
-                        <Feedback type={"check"} enabled={passedQuestions.includes(questionNumber)}/>
+                        <span onMouseDown={() => toggleFailed()}>
+                            <Feedback type={"cross"}
+                                      enabled={failedQuestions.includes(questionNumber)}/>
+                        </span>
+                        <span onMouseDown={() => togglePassed()}>
+                            <Feedback type={"check"}
+                                      enabled={passedQuestions.includes(questionNumber)}/>
+                        </span>
                     </div>
                 ) : (<></>)}
             </div>
