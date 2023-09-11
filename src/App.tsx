@@ -5,9 +5,10 @@ import './App.scss'
 
 import Title from './components/Title.tsx'
 import Starred from './components/buttons/Starred.tsx'
+import Feedback from "./components/buttons/Feedback.tsx";
+import Arrow from "./components/buttons/Arrow.tsx";
 
 import questions from '../public/q-a.json';
-import Feedback from "./components/buttons/Feedback.tsx";
 
 function App() {
     const enum QUESTION_TYPE {
@@ -64,26 +65,30 @@ function App() {
     }
 
     function toggleFailed() {
-        // reset
-        setPassedQuestions(passedQuestions.filter(item => item !== questionNumber));
-        if (!failedQuestions.includes(questionNumber)) {
-            // Add to starred
-            setFailedQuestions([...failedQuestions, questionNumber]);
-        } else {
-            // Remove from starred
-            setFailedQuestions(failedQuestions.filter(item => item !== questionNumber));
+        if (type === QUESTION_TYPE.answer) {
+            // reset
+            setPassedQuestions(passedQuestions.filter(item => item !== questionNumber));
+            if (!failedQuestions.includes(questionNumber)) {
+                // Add to starred
+                setFailedQuestions([...failedQuestions, questionNumber]);
+            } else {
+                // Remove from starred
+                setFailedQuestions(failedQuestions.filter(item => item !== questionNumber));
+            }
         }
     }
 
     function togglePassed() {
-        // reset
-        setFailedQuestions(failedQuestions.filter(item => item !== questionNumber));
-        if (!passedQuestions.includes(questionNumber)) {
-            // Add to starred
-            setPassedQuestions([...passedQuestions, questionNumber]);
-        } else {
-            // Remove from starred
-            setPassedQuestions(passedQuestions.filter(item => item !== questionNumber));
+        if (type === QUESTION_TYPE.answer) {
+            // reset
+            setFailedQuestions(failedQuestions.filter(item => item !== questionNumber));
+            if (!passedQuestions.includes(questionNumber)) {
+                // Add to starred
+                setPassedQuestions([...passedQuestions, questionNumber]);
+            } else {
+                // Remove from starred
+                setPassedQuestions(passedQuestions.filter(item => item !== questionNumber));
+            }
         }
     }
 
@@ -107,7 +112,12 @@ function App() {
                     </div>
                 ) : (<></>)}
             </div>
-            {/*<Arrow/>*/}
+            <span onMouseDown={() => switchQuestion("previous")}>
+                <Arrow direction={"left"}/>
+            </span>
+            <span onMouseDown={() => switchQuestion("next")}>
+                <Arrow direction={"right"}/>
+            </span>
             {/*<Timeline/>*/}
         </>
     )

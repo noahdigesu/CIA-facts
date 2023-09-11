@@ -1,0 +1,15 @@
+.arrow {
+  font-size: 2em;
+  position: absolute;
+  top: 50%;
+  transform: translate3d(0, -50%, 0);
+  cursor: pointer;
+}
+
+.left {
+  left: 20px;
+}
+
+.right {
+  right: 20px;
+}
