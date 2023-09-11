@@ -11,6 +11,7 @@ import Arrow from "./components/buttons/Arrow.tsx";
 
 import questions from '../public/q-a.json';
 import Timeline from "./components/Timeline.tsx";
+import {animate} from "framer-motion";
 
 function App() {
     const enum QUESTION_TYPE {
@@ -25,9 +26,15 @@ function App() {
     const [failedQuestions, setFailedQuestions] = useLocalStorage("failedQuestions", []);
 
     // Next question
-    useHotkeys('d', () => switchQuestion("next"));
+    useHotkeys('d', () => {
+        switchQuestion("next");
+        animateContent("right");
+    });
     // Previous question
-    useHotkeys('a', () => switchQuestion("previous"));
+    useHotkeys('a', () => {
+        switchQuestion("previous");
+        animateContent("left");
+    });
     // Starring
     useHotkeys('s', () => toggleStarred());
     // Mark as passed
@@ -92,25 +99,35 @@ function App() {
         }
     }
 
+    function animateContent(direction) {
+        animate(
+            `.content`,
+            {x: direction === "left" ? [-10, 0] : [10, 0]},
+            {type: "spring", mass: .5, duration: 1}
+        );
+    }
+
     return (
         <>
             <span onMouseDown={() => toggleStarred()}>
                 <Starred toggled={starredQuestions.includes(questionNumber)}/>
             </span>
-            <div className={"content"}>
-                <Title value={questions[questionNumber][type]} type={type}/>
-                {type === "answer" ? (
-                    <div className={"feedback"}>
+            <div className={"content-wrapper"}>
+                <div className={"content"}>
+                    <Title value={questions[questionNumber][type]} type={type}/>
+                    {type === "answer" ? (
+                        <div className={"feedback"}>
                         <span onMouseDown={() => toggleFailed()}>
                             <Feedback type={"cross"}
                                       enabled={failedQuestions.includes(questionNumber)}/>
                         </span>
-                        <span onMouseDown={() => togglePassed()}>
+                            <span onMouseDown={() => togglePassed()}>
                             <Feedback type={"check"}
                                       enabled={passedQuestions.includes(questionNumber)}/>
                         </span>
-                    </div>
-                ) : (<></>)}
+                        </div>
+                    ) : (<></>)}
+                </div>
             </div>
             {!(questionNumber === 0 && type === QUESTION_TYPE.question) ? (
                 <span onMouseDown={() => switchQuestion("previous")}>
