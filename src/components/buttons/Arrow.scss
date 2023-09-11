@@ -1,0 +1,26 @@
+.arrow-wrapper {
+  position: absolute;
+  top: 50%;
+  transform: translate3d(0, -50%, 0);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.arrow {
+  cursor: pointer;
+
+  svg {
+    width: 2em;
+    height: 2em;
+  }
+}
+
+.left {
+  left: 40px;
+}
+
+.right {
+  right: 40px;
+}

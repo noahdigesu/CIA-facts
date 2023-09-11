@@ -1,7 +1,14 @@
-span {
+#star-wrapper {
   position: absolute;
   right: 20px;
   top: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+#star {
   border: 2px solid white;
   border-radius: 100%;
   width: 3em;
@@ -10,12 +17,17 @@ span {
   justify-content: center;
   align-items: center;
   cursor: pointer;
+  outline: none;
 
   &:hover {
     background-color: white;
 
     svg {
       color: #000;
+    }
+
+    .key {
+      opacity: 0;
     }
   }
 }
