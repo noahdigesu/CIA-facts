@@ -10,8 +10,9 @@ import Feedback from "./components/buttons/Feedback.tsx";
 import Arrow from "./components/buttons/Arrow.tsx";
 
 import questions from '../public/q-a.json';
-import Timeline from "./components/Timeline.tsx";
+import Timeline from "./components/timeline/Timeline.tsx";
 import {animate} from "framer-motion";
+import Counter from "./components/Counter.tsx";
 
 function App() {
     const enum QUESTION_TYPE {
@@ -41,6 +42,8 @@ function App() {
     useHotkeys('e', () => togglePassed());
     // Mark as failed
     useHotkeys('q', () => toggleFailed());
+    // Clear all tags
+    useHotkeys('c', () => clear());
 
     function switchQuestion(switchType) {
         // Check if we're switching from a question to an answer
@@ -97,6 +100,12 @@ function App() {
                 setPassedQuestions(passedQuestions.filter(item => item !== questionNumber));
             }
         }
+    }
+
+    function clear() {
+        setFailedQuestions([]);
+        setPassedQuestions([]);
+        setStarredQuestions([]);
     }
 
     function animateContent(direction) {
@@ -169,7 +178,13 @@ function App() {
                     <Arrow direction={"right"}/>
                 </span>
             ) : (<></>)}
-            <Timeline/>
+            <Timeline questions={questions}
+                      currentQuestion={questionNumber}
+                      failedQuestions={failedQuestions}
+                      passedQuestions={passedQuestions}
+                      starredQuestions={starredQuestions}
+            />
+            <Counter questionNumber={questionNumber + 1} questionAmount={questions.length}/>
         </>
     )
 }

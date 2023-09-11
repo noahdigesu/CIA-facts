@@ -13,10 +13,94 @@
   },
   {
     "question": "Message blocks introduced",
-    "answer": 1964
+    "answer": "1964-1965"
   },
   {
     "question": "Term “Packet” invention",
     "answer": 1965
+  },
+  {
+    "question": "ARPANET planning begins",
+    "answer": 1966
+  },
+  {
+    "question": "ARPANET development begins",
+    "answer": 1967
+  },
+  {
+    "question": "Mother of all demos",
+    "answer": 1968
+  },
+  {
+    "question": "First Internet connection using IMPs",
+    "answer": 1969
+  },
+  {
+    "question": "Invention of RFCs",
+    "answer": 1969
+  },
+  {
+    "question": "First ARPANET email",
+    "answer": 1971
+  },
+  {
+    "question": "Invention of @",
+    "answer": 1971
+  },
+  {
+    "question": "TCP/IP specified",
+    "answer": 1974
+  },
+  {
+    "question": "Unix integrates IMP (Unix == ARPANET)",
+    "answer": 1975
+  },
+  {
+    "question": "Great Controversy (OSI / ISO)",
+    "answer": 1977
+  },
+  {
+    "question": "Sendmail",
+    "answer": 1982
+  },
+  {
+    "question": "System V released",
+    "answer": 1983
+  },
+  {
+    "question": "The great switch",
+    "answer": 1983
+  },
+  {
+    "question": "Unix Wars BSD ⚔ System V",
+    "answer": 1983
+  },
+  {
+    "question": "DNS specified",
+    "answer": 1984
+  },
+  {
+    "question": "Invention of IRC",
+    "answer": 1988
+  },
+  {
+    "question": "First Unix release free of all AT&T licenses",
+    "answer": 1988
+  },
+  {
+    "question": "Invention of the WWW",
+    "answer": "1990-92"
+  },
+  {
+    "question": "Mosaic browser released",
+    "answer": "1993"
+  },
+  {
+    "question": "Linux 1.0 released",
+    "answer": "1994"
+  },
+  {
+    "question": "W3C founded",
+    "answer": "1994"
   }
 ]
