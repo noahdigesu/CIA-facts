@@ -1,6 +1,6 @@
 import {useState} from 'react'
 import {useHotkeys} from 'react-hotkeys-hook'
-import { useLocalStorage } from "@uidotdev/usehooks";
+import {useLocalStorage} from "@uidotdev/usehooks";
 
 import './App.scss'
 
@@ -48,12 +48,10 @@ function App() {
         else if (switchToQuestion) setType(QUESTION_TYPE.question);
 
         // Update the questionNumber based on the switchType
-        if (switchType === "previous" && type === QUESTION_TYPE.question && questionNumber > 0) {
+        if (switchType === "previous" && type === QUESTION_TYPE.question && questionNumber > 0)
             setQuestionNumber(questionNumber - 1);
-        }
-        if (switchType === "next" && type === QUESTION_TYPE.answer && questionNumber < questions.length - 1) {
+        if (switchType === "next" && type === QUESTION_TYPE.answer && questionNumber < questions.length - 1)
             setQuestionNumber(questionNumber + 1);
-        }
     }
 
     function toggleStarred() {
@@ -114,12 +112,16 @@ function App() {
                     </div>
                 ) : (<></>)}
             </div>
-            <span onMouseDown={() => switchQuestion("previous")}>
-                <Arrow direction={"left"}/>
-            </span>
-            <span onMouseDown={() => switchQuestion("next")}>
-                <Arrow direction={"right"}/>
-            </span>
+            {!(questionNumber === 0 && type === QUESTION_TYPE.question) ? (
+                <span onMouseDown={() => switchQuestion("previous")}>
+                    <Arrow direction={"left"}/>
+                </span>
+            ) : (<></>)}
+            {!(questionNumber === questions.length - 1  && type === QUESTION_TYPE.answer) ? (
+                <span onMouseDown={() => switchQuestion("next")}>
+                    <Arrow direction={"right"}/>
+                </span>
+            ) : (<></>)}
             <Timeline/>
         </>
     )
