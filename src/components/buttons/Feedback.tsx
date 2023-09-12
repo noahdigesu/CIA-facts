@@ -9,22 +9,12 @@ type Props = {
 }
 
 function Feedback(props: Props) {
-    useHotkeys('q', () => animateCross());
-    useHotkeys('e', () => animateCheckMark());
-    // Uncaught Error: No valid element provided. when deselecting
-    // useHotkeys(props.type === "check" ? 'e' : 'q', () => animateCheck());
+    useHotkeys('q', () => animateFeedback("cross"));
+    useHotkeys('e', () => animateFeedback("check"));
 
-    function animateCross() {
+    function animateFeedback(type: string) {
         animate(
-            ".checkmark-wrapper.cross .checkmark",
-            {scale: [.8, 1]},
-            {type: "spring", mass: .5, duration: 1}
-        );
-    }
-
-    function animateCheckMark() {
-        animate(
-            ".checkmark-wrapper.check .checkmark",
+            `.checkmark-wrapper.${type} .checkmark`,
             {scale: [.8, 1]},
             {type: "spring", mass: .5, duration: 1}
         );
@@ -32,13 +22,7 @@ function Feedback(props: Props) {
 
     return (
         <div className={`checkmark-wrapper ${props.type}`}
-             onClick={() => {
-                 animate(
-                     `.checkmark-wrapper.${props.type} .checkmark`,
-                     {scale: [.8, 1]},
-                     {type: "spring", mass: .5, duration: 1}
-                 );
-             }}>
+             onClick={() => animateFeedback(props.type)}>
             <span className={`checkmark ${props.enabled ? "enabled" : ""}`}>
                 {props.type === "check" ? "✅" : "❌"}
             </span>
