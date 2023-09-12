@@ -12,13 +12,12 @@ import Starred from './components/buttons/Starred.tsx';
 import Feedback from "./components/buttons/Feedback.tsx";
 import Arrow from "./components/buttons/Arrow.tsx";
 import Timeline from "./components/timeline/Timeline.tsx";
-import Counter from "./components/Counter.tsx";
 
 import {DIRECTION, QUESTION_TYPE} from "./constants/constants.tsx";
 import {Question} from "./types/types.tsx";
 
 function App() {
-    const [currentQuestion, setcurrentQuestion] = useState<number>(0);
+    const [currentQuestion, setCurrentQuestion] = useState<number>(0);
     const [type, setType] = useState<QUESTION_TYPE>(QUESTION_TYPE.question);
     const [questions, setQuestions] = useState<Question[]>(QUESTIONS);
     const [starredQuestions, setStarredQuestions] = useLocalStorage<Question[]>("starredQuestions", []);
@@ -68,7 +67,7 @@ function App() {
                 }
             }
             setQuestions(filteredArray);
-            setcurrentQuestion(0);
+            setCurrentQuestion(0);
         }
     }
 
@@ -86,13 +85,13 @@ function App() {
 
         // Update the currentQuestion based on the switchType
         if (switchType === DIRECTION.previous && type === QUESTION_TYPE.question && currentQuestion > 0)
-            setcurrentQuestion(currentQuestion - 1);
+            setCurrentQuestion(currentQuestion - 1);
         if (switchType === DIRECTION.next && type === QUESTION_TYPE.answer && currentQuestion < questions.length - 1)
-            setcurrentQuestion(currentQuestion + 1);
+            setCurrentQuestion(currentQuestion + 1);
     }
 
     function goToQuestion(n: number) {
-        setcurrentQuestion(n);
+        setCurrentQuestion(n);
         setType(QUESTION_TYPE.question);
     }
 
@@ -252,7 +251,7 @@ function App() {
                       passedQuestions={passedQuestions}
                       starredQuestions={starredQuestions}
             />
-            <Counter questionNumber={currentQuestion + 1} questionAmount={questions.length}/>
+            {/*<Counter questionNumber={currentQuestion + 1} questionAmount={questions.length}/>*/}
         </>
     )
 }

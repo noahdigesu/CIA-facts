@@ -36,6 +36,26 @@
   content: "";
   transition: .8s cubic-bezier(0.16, 1, 0.3, 1);
 
+  &.checkmark {
+    opacity: 1;
+    width: 22px;
+    height: 22px;
+    transform: translate3d(0, -9px, 0);
+    display: flex;
+    justify-content: center;
+    align-content: center;
+  }
+
+  &.checkmark svg {
+    color: #fff;
+    font-size: .8em;
+    background: none;
+  }
+
+  &.current.checkmark svg {
+    color: #000;
+  }
+
   // Tag
   &.incomplete, &.previous {
     border: 1px solid #fff;
