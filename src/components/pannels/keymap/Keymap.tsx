@@ -15,16 +15,16 @@ function Keymap() {
 
             <KeyCategory name={"Tagging"}/>
             <div className={"keys"}>
-                <Key letter={"q"} description={"Mark current question as failed"}/>
-                <Key letter={"e"} description={"Mark current question as passed"}/>
+                <Key letter={"f"} description={"Mark current question as failed"}/>
+                <Key letter={"c"} description={"Mark current question as passed"}/>
                 <Key letter={"s"} description={"Mark current question as starred"}/>
-                <Key type={"long"} letter={"ctrl + r"} description={"Reset all tags"}/>
+                <Key type={"long"} letter={"shift + r"} description={"Reset all tags"}/>
             </div>
 
             <KeyCategory name={"Filters"}/>
             <div className={"keys"}>
-                <Key type={"long"} letter={"ctrl + s"} description={"Only show starred questions"}/>
-                <Key type={"long"} letter={"ctrl + f"} description={"Only show failed questions"}/>
+                <Key type={"long"} letter={"shift + s"} description={"Only show starred questions"}/>
+                <Key type={"long"} letter={"shift + f"} description={"Only show failed questions"}/>
             </div>
         </div>
     );

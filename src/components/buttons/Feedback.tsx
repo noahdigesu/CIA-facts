@@ -8,8 +8,8 @@ type Props = {
 }
 
 function Feedback(props: Props) {
-    useHotkeys('q', () => animateFeedback("cross"));
-    useHotkeys('e', () => animateFeedback("check"));
+    useHotkeys('f', () => animateFeedback("cross"));
+    useHotkeys('c', () => animateFeedback("check"));
 
     function animateFeedback(type: string) {
         animate(
