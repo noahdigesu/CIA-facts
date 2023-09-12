@@ -35,14 +35,14 @@ function App() {
         switchQuestion(DIRECTION.previous);
         animateContent(DIRECTION.previous);
     });
-    // Starring
+    // Mark as starred
     useHotkeys('s', () => toggleStarred());
     // Mark as passed
     useHotkeys('e', () => togglePassed());
     // Mark as failed
     useHotkeys('q', () => toggleFailed());
     // Clear all tags
-    useHotkeys('c', () => clear());
+    useHotkeys('ctrl+c', () => clear(), {preventDefault: true});
     // Go to first question
     useHotkeys('home', () => goToQuestion(0));
     // Go to last question
@@ -119,6 +119,10 @@ function App() {
                 && question.answer === questions[currentQuestion].answer
         });
     }
+
+    // function clearTag() {
+    //
+    // }
 
     function toggleStarred() {
         if (!isStarred()) {
