@@ -20,7 +20,7 @@ import Keymap from "./components/pannels/keymap/Keymap.tsx";
 function App() {
     const [type, setType] = useState<QUESTION_TYPE>(QUESTION_TYPE.question);
     const [questions, setQuestions] = useState<Question[]>(QUESTIONS);
-    const [isHotkeyPannelToggled, setIsHotkeyPannelToggled] = useState<boolean>(false);
+    const [isHotkeyPanelToggled, setIsHotkeyPanelToggled] = useState<boolean>(false);
     const [currentQuestion, setCurrentQuestion] = useLocalStorage<number>("currentQuestion", 0);
     const [starredQuestions, setStarredQuestions] = useLocalStorage<Question[]>("starredQuestions", []);
     const [passedQuestions, setPassedQuestions] = useLocalStorage<Question[]>("passedQuestions", []);
@@ -40,19 +40,19 @@ function App() {
     // Mark as starred
     useHotkeys('s', () => toggleStarred());
     // Mark as passed
-    useHotkeys('e', () => togglePassed());
+    useHotkeys('c', () => togglePassed());
     // Mark as failed
-    useHotkeys('q', () => toggleFailed());
+    useHotkeys('f', () => toggleFailed());
     // Clear all tags
-    useHotkeys('ctrl+r', () => clear(), {preventDefault: true});
+    useHotkeys('shift+r', () => reset(), {preventDefault: true});
     // Go to first question
     useHotkeys('home', () => goToQuestion(0));
     // Go to last question
     useHotkeys('end', () => goToQuestion(questions.length - 1));
     // Filter by starred
-    useHotkeys('ctrl+s', () => toggleStarredFilter(), {preventDefault: true});
+    useHotkeys('shift+s', () => toggleStarredFilter(), {preventDefault: true});
     // Filter by failed
-    useHotkeys('ctrl+f', () => toggleFailedFilter(), {preventDefault: true});
+    useHotkeys('shift+f', () => toggleFailedFilter(), {preventDefault: true});
     // Show Keymap panel
     useHotkeys('k', () => toggleHotkeys());
 
@@ -124,6 +124,7 @@ function App() {
         });
     }
 
+    // todo
     // function clearTag() {
     //
     // }
@@ -183,14 +184,17 @@ function App() {
         }
     }
 
-    function clear() {
+    function reset() {
         setFailedQuestions([]);
         setPassedQuestions([]);
         setStarredQuestions([]);
+        setQuestions(QUESTIONS);
+        setCurrentQuestion(0);
     }
 
     function toggleHotkeys() {
-        setIsHotkeyPannelToggled(!isHotkeyPannelToggled);
+        setIsHotkeyPanelToggled(!isHotkeyPanelToggled);
+        // todo animation
         // if (isHotkeyPannelToggled) {
         //     animate(
         //         "#keymap",
@@ -254,7 +258,7 @@ function App() {
             />
             {/*<Counter questionNumber={currentQuestion + 1} questionAmount={questions.length}/>*/}
 
-            {isHotkeyPannelToggled ? <Keymap/> : ""}
+            {isHotkeyPanelToggled ? <Keymap/> : ""}
         </>
     )
 }
