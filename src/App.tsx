@@ -2,17 +2,16 @@ import {useState} from 'react';
 import {useHotkeys} from 'react-hotkeys-hook';
 // @ts-ignore
 import {useLocalStorage} from "@uidotdev/usehooks";
+import {animate} from "framer-motion";
 
 import './App.scss'
+import questions from './assets/q-a.json';
 
 import Title from './components/Title.tsx';
 import Starred from './components/buttons/Starred.tsx';
 import Feedback from "./components/buttons/Feedback.tsx";
 import Arrow from "./components/buttons/Arrow.tsx";
-
-import questions from './assets/q-a.json';
 import Timeline from "./components/timeline/Timeline.tsx";
-import {animate} from "framer-motion";
 import Counter from "./components/Counter.tsx";
 
 import {DIRECTION, QUESTION_TYPE} from "./constants/constants.tsx";
