@@ -50,33 +50,27 @@ function App() {
     // Filter by starred
     useHotkeys('ctrl+s', () => toggleStarredFilter(), {preventDefault: true});
     // Filter by failed
-    useHotkeys('ctrl+f', () => ToggleFailedFilter(), {preventDefault: true});
+    useHotkeys('ctrl+f', () => toggleFailedFilter(), {preventDefault: true});
 
     // todo improve
     function toggleStarredFilter() {
-        if (filter !== "starred") {
-            if (starredQuestions.length > 0) {
-                setQuestions(starredQuestions);
-                setCurrentQuestion(0);
-                setFilter("starred");
-            }
-        } else {
-            setQuestions(QUESTIONS);
+        if (filter !== "starred" && starredQuestions.length > 0) {
+            setQuestions(starredQuestions);
             setCurrentQuestion(0);
+            setFilter("starred");
+        } else if (filter === "starred") {
+            setQuestions(QUESTIONS);
             setFilter("none");
         }
     }
 
-    function ToggleFailedFilter() {
-        if (filter !== "failed") {
-            if (failedQuestions.length > 0) {
-                setQuestions(failedQuestions);
-                setCurrentQuestion(0);
-                setFilter("failed");
-            }
-        } else {
-            setQuestions(QUESTIONS);
+    function toggleFailedFilter() {
+        if (filter !== "failed" && failedQuestions.length > 0) {
+            setQuestions(failedQuestions);
             setCurrentQuestion(0);
+            setFilter("failed");
+        } else if (filter === "failed") {
+            setQuestions(QUESTIONS);
             setFilter("none");
         }
     }
@@ -105,11 +99,29 @@ function App() {
         setType(QUESTION_TYPE.question);
     }
 
-    function toggleStarred() {
-        if (!starredQuestions.some((question: Question) => {
+    function isStarred() {
+        return starredQuestions.some((question: Question) => {
             return question.question === questions[currentQuestion].question
                 && question.answer === questions[currentQuestion].answer
-        })) {
+        });
+    }
+
+    function isFailed() {
+        return failedQuestions.some((question: Question) => {
+            return question.question === questions[currentQuestion].question
+                && question.answer === questions[currentQuestion].answer
+        });
+    }
+
+    function isPassed() {
+        return passedQuestions.some((question: Question) => {
+            return question.question === questions[currentQuestion].question
+                && question.answer === questions[currentQuestion].answer
+        });
+    }
+
+    function toggleStarred() {
+        if (!isStarred()) {
             // Add to starred
             setStarredQuestions([...starredQuestions, questions[currentQuestion]]);
         } else {
@@ -129,10 +141,7 @@ function App() {
                     && question.answer !== questions[currentQuestion].answer
             }));
 
-            if (!failedQuestions.some((question: Question) => {
-                return question.question === questions[currentQuestion].question
-                    && question.answer === questions[currentQuestion].answer
-            })) {
+            if (!isFailed()) {
                 // Add to failed
                 setFailedQuestions([...failedQuestions, questions[currentQuestion]]);
             } else {
@@ -153,14 +162,11 @@ function App() {
                     && question.answer !== questions[currentQuestion].answer
             }));
 
-            if (!passedQuestions.some((question: Question) => {
-                return question.question === questions[currentQuestion].question
-                    && question.answer === questions[currentQuestion].answer
-            })) {
-                // Add to failed
+            if (!isPassed()) {
+                // Add to passed
                 setPassedQuestions([...passedQuestions, questions[currentQuestion]]);
             } else {
-                // Remove from failed
+                // Remove from passed
                 setPassedQuestions(passedQuestions.filter((question: Question) => {
                     return question.question !== questions[currentQuestion].question
                         && question.answer !== questions[currentQuestion].answer
@@ -173,7 +179,6 @@ function App() {
         setFailedQuestions([]);
         setPassedQuestions([]);
         setStarredQuestions([]);
-        // setQuestions(QUESTIONS);
     }
 
     function animateContent(direction: DIRECTION) {
@@ -193,10 +198,7 @@ function App() {
                   onMouseLeave={() => {
                       animate("#star-wrapper .key", {y: [0, -5], opacity: 0}, {})
                   }}>
-                <Starred toggled={starredQuestions.some((question: Question) => {
-                    return question.question === questions[currentQuestion].question
-                        && question.answer === questions[currentQuestion].answer
-                })}/>
+                <Starred toggled={isStarred()}/>
             </span>
             <div className={"content-wrapper"}>
                 <div className={"content"}>
@@ -211,10 +213,7 @@ function App() {
                                       animate(".checkmark-wrapper.cross .key", {y: [0, -5], opacity: 0}, {})
                                   }}>
                                 <Feedback type={"cross"}
-                                          enabled={failedQuestions.some((question: Question) => {
-                                              return question.question === questions[currentQuestion].question
-                                                  && question.answer === questions[currentQuestion].answer
-                                          })}/>
+                                          enabled={isFailed()}/>
                             </span>
                             <span onMouseDown={() => togglePassed()}
                                   onMouseEnter={() => {
@@ -224,10 +223,7 @@ function App() {
                                       animate(".checkmark-wrapper.check .key", {y: [0, -5], opacity: 0}, {})
                                   }}>
                                 <Feedback type={"check"}
-                                          enabled={passedQuestions.some((question: Question) => {
-                                              return question.question === questions[currentQuestion].question
-                                                  && question.answer === questions[currentQuestion].answer
-                                          })}/>
+                                          enabled={isPassed()}/>
                             </span>
                         </div>
                     ) : (<></>)}
