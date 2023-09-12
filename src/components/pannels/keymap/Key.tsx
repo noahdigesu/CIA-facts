@@ -13,7 +13,7 @@ function Key(props: Props) {
                 {props.letter}
             </span>
             <span className={"description"}>
-                {props.description}
+                {props.description}.
             </span>
         </div>
     );

@@ -13,9 +13,9 @@ function Title(props: Props) {
         <div id={"title"}>
             {props.type === QUESTION_TYPE.question ? (
                 <p>{props.question.question + "?"}</p>
-            ) : <p>{props.question.answer}
+            ) : <div>{props.question.answer}
                 <p id={"author"}>{props.question.author ? props.question.author : ""}</p>
-            </p>}
+            </div>}
         </div>
     );
 }

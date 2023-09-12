@@ -6,6 +6,8 @@
   max-width: 10em;
   text-align: center;
   user-select: none;
+  display: flex;
+  flex-direction: row;
 
   #author {
     font-size: clamp(1rem, -0.875rem + 8.333vw, 2rem);
