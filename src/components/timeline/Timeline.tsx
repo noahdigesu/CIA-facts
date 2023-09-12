@@ -36,6 +36,8 @@ function Timeline(props: Props) {
                         <CheckPoint
                             state={state}
                             tag={tag}
+                            previousDate={props.currentQuestion != 0 ? props.questions[props.currentQuestion - 1].answer : ""}
+                            isLast={i === props.questions.length - 1}
                         />
                     </span>
                 }

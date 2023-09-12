@@ -12,25 +12,23 @@ import Starred from './components/buttons/Starred.tsx';
 import Feedback from "./components/buttons/Feedback.tsx";
 import Arrow from "./components/buttons/Arrow.tsx";
 import Timeline from "./components/timeline/Timeline.tsx";
-import Counter from "./components/Counter.tsx";
 
 import {DIRECTION, QUESTION_TYPE} from "./constants/constants.tsx";
 import {Question} from "./types/types.tsx";
 
 function App() {
-    const [currentQuestion, setcurrentQuestion] = useState<number>(0);
+    const [currentQuestion, setCurrentQuestion] = useState<number>(0);
     const [type, setType] = useState<QUESTION_TYPE>(QUESTION_TYPE.question);
     const [questions, setQuestions] = useState<Question[]>(QUESTIONS);
     const [starredQuestions, setStarredQuestions] = useLocalStorage<Question[]>("starredQuestions", []);
-    // todo switch to Question[]
-    const [passedQuestions, setPassedQuestions] = useLocalStorage<number[]>("passedQuestions", []);
+    const [passedQuestions, setPassedQuestions] = useLocalStorage<Question[]>("passedQuestions", []);
     const [failedQuestions, setFailedQuestions] = useLocalStorage<Question[]>("failedQuestions", []);
+    const [filter, setFilter] = useState<string>("none");
 
     // Next question
     useHotkeys('d', () => {
         switchQuestion(DIRECTION.next);
         animateContent(DIRECTION.next);
-        console.log((questions.length / currentQuestion) - 5);
     });
     // Previous question
     useHotkeys('a', () => {
@@ -50,25 +48,30 @@ function App() {
     // Go to last question
     useHotkeys('end', () => goToQuestion(questions.length - 1));
     // Filter by starred
-    useHotkeys('ctrl+s', () => filterByStarred(), {preventDefault: true});
+    useHotkeys('ctrl+s', () => toggleStarredFilter(), {preventDefault: true});
     // Filter by failed
-    useHotkeys('ctrl+f', () => {
-        alert("failed")
-    }, {preventDefault: true});
+    useHotkeys('ctrl+f', () => toggleFailedFilter(), {preventDefault: true});
 
     // todo improve
-    function filterByStarred() {
-        if (starredQuestions.length > 0) {
-            const filteredArray = [];
-            for (let i = 0; i < questions.length; i++) {
-                for (let j = 0; j < starredQuestions; j++) {
-                    if (i === starredQuestions[j]) {
-                        filteredArray.push(questions[i]);
-                    }
-                }
-            }
-            setQuestions(filteredArray);
-            setcurrentQuestion(0);
+    function toggleStarredFilter() {
+        if (filter !== "starred" && starredQuestions.length > 0) {
+            setQuestions(starredQuestions);
+            setCurrentQuestion(0);
+            setFilter("starred");
+        } else if (filter === "starred") {
+            setQuestions(QUESTIONS);
+            setFilter("none");
+        }
+    }
+
+    function toggleFailedFilter() {
+        if (filter !== "failed" && failedQuestions.length > 0) {
+            setQuestions(failedQuestions);
+            setCurrentQuestion(0);
+            setFilter("failed");
+        } else if (filter === "failed") {
+            setQuestions(QUESTIONS);
+            setFilter("none");
         }
     }
 
@@ -86,21 +89,39 @@ function App() {
 
         // Update the currentQuestion based on the switchType
         if (switchType === DIRECTION.previous && type === QUESTION_TYPE.question && currentQuestion > 0)
-            setcurrentQuestion(currentQuestion - 1);
+            setCurrentQuestion(currentQuestion - 1);
         if (switchType === DIRECTION.next && type === QUESTION_TYPE.answer && currentQuestion < questions.length - 1)
-            setcurrentQuestion(currentQuestion + 1);
+            setCurrentQuestion(currentQuestion + 1);
     }
 
     function goToQuestion(n: number) {
-        setcurrentQuestion(n);
+        setCurrentQuestion(n);
         setType(QUESTION_TYPE.question);
     }
 
-    function toggleStarred() {
-        if (!starredQuestions.some((question: Question) => {
+    function isStarred() {
+        return starredQuestions.some((question: Question) => {
             return question.question === questions[currentQuestion].question
                 && question.answer === questions[currentQuestion].answer
-        })) {
+        });
+    }
+
+    function isFailed() {
+        return failedQuestions.some((question: Question) => {
+            return question.question === questions[currentQuestion].question
+                && question.answer === questions[currentQuestion].answer
+        });
+    }
+
+    function isPassed() {
+        return passedQuestions.some((question: Question) => {
+            return question.question === questions[currentQuestion].question
+                && question.answer === questions[currentQuestion].answer
+        });
+    }
+
+    function toggleStarred() {
+        if (!isStarred()) {
             // Add to starred
             setStarredQuestions([...starredQuestions, questions[currentQuestion]]);
         } else {
@@ -120,10 +141,7 @@ function App() {
                     && question.answer !== questions[currentQuestion].answer
             }));
 
-            if (!failedQuestions.some((question: Question) => {
-                return question.question === questions[currentQuestion].question
-                    && question.answer === questions[currentQuestion].answer
-            })) {
+            if (!isFailed()) {
                 // Add to failed
                 setFailedQuestions([...failedQuestions, questions[currentQuestion]]);
             } else {
@@ -144,14 +162,11 @@ function App() {
                     && question.answer !== questions[currentQuestion].answer
             }));
 
-            if (!passedQuestions.some((question: Question) => {
-                return question.question === questions[currentQuestion].question
-                    && question.answer === questions[currentQuestion].answer
-            })) {
-                // Add to failed
+            if (!isPassed()) {
+                // Add to passed
                 setPassedQuestions([...passedQuestions, questions[currentQuestion]]);
             } else {
-                // Remove from failed
+                // Remove from passed
                 setPassedQuestions(passedQuestions.filter((question: Question) => {
                     return question.question !== questions[currentQuestion].question
                         && question.answer !== questions[currentQuestion].answer
@@ -164,7 +179,6 @@ function App() {
         setFailedQuestions([]);
         setPassedQuestions([]);
         setStarredQuestions([]);
-        // setQuestions(QUESTIONS);
     }
 
     function animateContent(direction: DIRECTION) {
@@ -184,10 +198,7 @@ function App() {
                   onMouseLeave={() => {
                       animate("#star-wrapper .key", {y: [0, -5], opacity: 0}, {})
                   }}>
-                <Starred toggled={starredQuestions.some((question: Question) => {
-                    return question.question === questions[currentQuestion].question
-                        && question.answer === questions[currentQuestion].answer
-                })}/>
+                <Starred toggled={isStarred()}/>
             </span>
             <div className={"content-wrapper"}>
                 <div className={"content"}>
@@ -202,10 +213,7 @@ function App() {
                                       animate(".checkmark-wrapper.cross .key", {y: [0, -5], opacity: 0}, {})
                                   }}>
                                 <Feedback type={"cross"}
-                                          enabled={failedQuestions.some((question: Question) => {
-                                              return question.question === questions[currentQuestion].question
-                                                  && question.answer === questions[currentQuestion].answer
-                                          })}/>
+                                          enabled={isFailed()}/>
                             </span>
                             <span onMouseDown={() => togglePassed()}
                                   onMouseEnter={() => {
@@ -215,10 +223,7 @@ function App() {
                                       animate(".checkmark-wrapper.check .key", {y: [0, -5], opacity: 0}, {})
                                   }}>
                                 <Feedback type={"check"}
-                                          enabled={passedQuestions.some((question: Question) => {
-                                              return question.question === questions[currentQuestion].question
-                                                  && question.answer === questions[currentQuestion].answer
-                                          })}/>
+                                          enabled={isPassed()}/>
                             </span>
                         </div>
                     ) : (<></>)}
@@ -252,7 +257,7 @@ function App() {
                       passedQuestions={passedQuestions}
                       starredQuestions={starredQuestions}
             />
-            <Counter questionNumber={currentQuestion + 1} questionAmount={questions.length}/>
+            {/*<Counter questionNumber={currentQuestion + 1} questionAmount={questions.length}/>*/}
         </>
     )
 }
