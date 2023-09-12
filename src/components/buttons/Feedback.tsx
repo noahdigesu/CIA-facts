@@ -8,7 +8,8 @@ type Props = {
     enabled: boolean
 }
 
-function Feedback(props: Props)  {
+function Feedback(props: Props) {
+    // Uncaught Error: No valid element provided. when deselecting
     useHotkeys(props.type === "check" ? 'e' : 'q', () => animateCheck());
 
     // Todo: fix animations

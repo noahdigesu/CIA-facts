@@ -6,4 +6,15 @@
   left: 50%;
   bottom: 60px;
   transform: translate3d(-50%, 0, 0);
+
+  #line {
+    height: 1px;
+    width: 100%;
+    position: absolute;
+    top: calc(50% - 2px);
+    left: 0;
+    content: "";
+    z-index: -1;
+    transform: translate3d(0, -50%, 0);
+  }
 }

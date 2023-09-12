@@ -9,7 +9,7 @@ export const enum DIRECTION {
 }
 
 export const enum STATE {
-    normal = "normal", previous = "previous", current = "current"
+    normal = "normal", previous = "previous", current = "current", distant = "distant"
 }
 
 export const enum TAG {

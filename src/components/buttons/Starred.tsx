@@ -1,5 +1,9 @@
 import "./Starred.scss";
 import {animate, motion} from "framer-motion";
+import {useHotkeys} from 'react-hotkeys-hook';
+import {Star} from 'react-feather';
+
+import Key from "../Key.tsx";
 
 type Props = {
     toggled: boolean
@@ -26,10 +30,5 @@ function Starred(props: Props) {
         </span>
     );
 }
-
-import {useHotkeys} from 'react-hotkeys-hook';
-import {Star} from 'react-feather';
-
-import Key from "../Key.tsx";
 
 export default Starred;
