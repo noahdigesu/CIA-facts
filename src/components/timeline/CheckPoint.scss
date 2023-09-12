@@ -34,7 +34,7 @@
   width: 13px;
   height: 13px;
   content: "";
-  transition: .8s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: background-color .8s cubic-bezier(0.16, 1, 0.3, 1), border .8s cubic-bezier(0.16, 1, 0.3, 1), border-radius .8s cubic-bezier(0.16, 1, 0.3, 1);
 
   &.checkmark {
     opacity: 1;

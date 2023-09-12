@@ -21,15 +21,14 @@ function App() {
     const [type, setType] = useState<QUESTION_TYPE>(QUESTION_TYPE.question);
     const [questions, setQuestions] = useState<Question[]>(QUESTIONS);
     const [starredQuestions, setStarredQuestions] = useLocalStorage<Question[]>("starredQuestions", []);
-    // todo switch to Question[]
-    const [passedQuestions, setPassedQuestions] = useLocalStorage<number[]>("passedQuestions", []);
+    const [passedQuestions, setPassedQuestions] = useLocalStorage<Question[]>("passedQuestions", []);
     const [failedQuestions, setFailedQuestions] = useLocalStorage<Question[]>("failedQuestions", []);
+    const [filter, setFilter] = useState<string>("none");
 
     // Next question
     useHotkeys('d', () => {
         switchQuestion(DIRECTION.next);
         animateContent(DIRECTION.next);
-        console.log((questions.length / currentQuestion) - 5);
     });
     // Previous question
     useHotkeys('a', () => {
@@ -49,25 +48,36 @@ function App() {
     // Go to last question
     useHotkeys('end', () => goToQuestion(questions.length - 1));
     // Filter by starred
-    useHotkeys('ctrl+s', () => filterByStarred(), {preventDefault: true});
+    useHotkeys('ctrl+s', () => toggleStarredFilter(), {preventDefault: true});
     // Filter by failed
-    useHotkeys('ctrl+f', () => {
-        alert("failed")
-    }, {preventDefault: true});
+    useHotkeys('ctrl+f', () => ToggleFailedFilter(), {preventDefault: true});
 
     // todo improve
-    function filterByStarred() {
-        if (starredQuestions.length > 0) {
-            const filteredArray = [];
-            for (let i = 0; i < questions.length; i++) {
-                for (let j = 0; j < starredQuestions; j++) {
-                    if (i === starredQuestions[j]) {
-                        filteredArray.push(questions[i]);
-                    }
-                }
+    function toggleStarredFilter() {
+        if (filter !== "starred") {
+            if (starredQuestions.length > 0) {
+                setQuestions(starredQuestions);
+                setCurrentQuestion(0);
+                setFilter("starred");
             }
-            setQuestions(filteredArray);
+        } else {
+            setQuestions(QUESTIONS);
             setCurrentQuestion(0);
+            setFilter("none");
+        }
+    }
+
+    function ToggleFailedFilter() {
+        if (filter !== "failed") {
+            if (failedQuestions.length > 0) {
+                setQuestions(failedQuestions);
+                setCurrentQuestion(0);
+                setFilter("failed");
+            }
+        } else {
+            setQuestions(QUESTIONS);
+            setCurrentQuestion(0);
+            setFilter("none");
         }
     }
 
