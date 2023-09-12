@@ -1,7 +1,7 @@
 import "./Feedback.scss";
-import {useHotkeys} from "react-hotkeys-hook";
-import {animate} from "framer-motion";
 import Key from "../Key.tsx";
+import {animate} from "framer-motion";
+import {useHotkeys} from "react-hotkeys-hook";
 
 type Props = {
     type: string,
@@ -9,21 +9,37 @@ type Props = {
 }
 
 function Feedback(props: Props) {
+    useHotkeys('q', () => animateCross());
+    useHotkeys('e', () => animateCheckMark());
     // Uncaught Error: No valid element provided. when deselecting
-    useHotkeys(props.type === "check" ? 'e' : 'q', () => animateCheck());
+    // useHotkeys(props.type === "check" ? 'e' : 'q', () => animateCheck());
 
-    // Todo: fix animations
-    const animateCheck = () => {
+    function animateCross() {
         animate(
-            ".enabled",
+            ".checkmark-wrapper.cross .checkmark",
+            {scale: [.8, 1]},
+            {type: "spring", mass: .5, duration: 1}
+        );
+    }
+
+    function animateCheckMark() {
+        animate(
+            ".checkmark-wrapper.check .checkmark",
             {scale: [.8, 1]},
             {type: "spring", mass: .5, duration: 1}
         );
     }
 
     return (
-        <div className={`checkmark-wrapper ${props.type}`}>
-            <span onMouseDown={animateCheck} className={`checkmark ${props.enabled ? "enabled" : ""}`}>
+        <div className={`checkmark-wrapper ${props.type}`}
+             onClick={() => {
+                 animate(
+                     `.checkmark-wrapper.${props.type} .checkmark`,
+                     {scale: [.8, 1]},
+                     {type: "spring", mass: .5, duration: 1}
+                 );
+             }}>
+            <span className={`checkmark ${props.enabled ? "enabled" : ""}`}>
                 {props.type === "check" ? "✅" : "❌"}
             </span>
             <Key letter={props.type === "check" ? "e" : "q"}/>

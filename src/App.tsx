@@ -210,6 +210,13 @@ function App() {
                     {type === "answer" ? (
                         <div className={"feedback"}>
                             <span onMouseDown={() => toggleFailed()}
+                                  onClick={() => {
+                                      animate(
+                                          ".checkmark-wrapper.cross .checkmark",
+                                          {scale: [.8, 1]},
+                                          {type: "spring", mass: .5, duration: 1}
+                                      );
+                                  }}
                                   onMouseEnter={() => {
                                       animate(".checkmark-wrapper.cross .key", {y: [-5, 0], opacity: .6}, {})
                                   }}
