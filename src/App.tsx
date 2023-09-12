@@ -15,11 +15,13 @@ import Timeline from "./components/timeline/Timeline.tsx";
 
 import {DIRECTION, QUESTION_TYPE} from "./constants/constants.tsx";
 import {Question} from "./types/types.tsx";
+import Keymap from "./components/pannels/keymap/Keymap.tsx";
 
 function App() {
-    const [currentQuestion, setCurrentQuestion] = useState<number>(0);
     const [type, setType] = useState<QUESTION_TYPE>(QUESTION_TYPE.question);
     const [questions, setQuestions] = useState<Question[]>(QUESTIONS);
+    const [isHotkeyPannelToggled, setIsHotkeyPannelToggled] = useState<boolean>(false);
+    const [currentQuestion, setCurrentQuestion] = useLocalStorage<number>("currentQuestion", 0);
     const [starredQuestions, setStarredQuestions] = useLocalStorage<Question[]>("starredQuestions", []);
     const [passedQuestions, setPassedQuestions] = useLocalStorage<Question[]>("passedQuestions", []);
     const [failedQuestions, setFailedQuestions] = useLocalStorage<Question[]>("failedQuestions", []);
@@ -51,6 +53,8 @@ function App() {
     useHotkeys('ctrl+s', () => toggleStarredFilter(), {preventDefault: true});
     // Filter by failed
     useHotkeys('ctrl+f', () => toggleFailedFilter(), {preventDefault: true});
+    // Show Keymap panel
+    useHotkeys('k', () => toggleHotkeys());
 
     // todo improve
     function toggleStarredFilter() {
@@ -185,6 +189,23 @@ function App() {
         setStarredQuestions([]);
     }
 
+    function toggleHotkeys() {
+        setIsHotkeyPannelToggled(!isHotkeyPannelToggled);
+        // if (isHotkeyPannelToggled) {
+        //     animate(
+        //         "#keymap",
+        //         {y: [10, 0], opacity: [0, 1], display: ["none", "block"], transform: "translate3d(-50%, -50%, 0)"},
+        //         {type: "spring", mass: .5, duration: 1}
+        //     )
+        // } else {
+        //     animate(
+        //         "#keymap",
+        //         {y: [0, 10], opacity: [1, 0], display: ["block", "none"], transform: "translate3d(-50%, -50%, 0)"},
+        //         {type: "spring", mass: .5, duration: 1}
+        //     )
+        // }
+    }
+
     function animateContent(direction: DIRECTION) {
         animate(
             `.content`,
@@ -195,13 +216,7 @@ function App() {
 
     return (
         <>
-            <span onMouseDown={() => toggleStarred()}
-                  onMouseEnter={() => {
-                      animate("#star-wrapper .key", {y: [-5, 0], opacity: .6}, {})
-                  }}
-                  onMouseLeave={() => {
-                      animate("#star-wrapper .key", {y: [0, -5], opacity: 0}, {})
-                  }}>
+            <span onMouseDown={() => toggleStarred()}>
                 <Starred toggled={isStarred()}/>
             </span>
             <div className={"content-wrapper"}>
@@ -209,30 +224,11 @@ function App() {
                     <Title question={questions[currentQuestion]} type={type}/>
                     {type === "answer" ? (
                         <div className={"feedback"}>
-                            <span onMouseDown={() => toggleFailed()}
-                                  onClick={() => {
-                                      animate(
-                                          ".checkmark-wrapper.cross .checkmark",
-                                          {scale: [.8, 1]},
-                                          {type: "spring", mass: .5, duration: 1}
-                                      );
-                                  }}
-                                  onMouseEnter={() => {
-                                      animate(".checkmark-wrapper.cross .key", {y: [-5, 0], opacity: .6}, {})
-                                  }}
-                                  onMouseLeave={() => {
-                                      animate(".checkmark-wrapper.cross .key", {y: [0, -5], opacity: 0}, {})
-                                  }}>
+                            <span onMouseDown={() => toggleFailed()}>
                                 <Feedback type={"cross"}
                                           enabled={isFailed()}/>
                             </span>
-                            <span onMouseDown={() => togglePassed()}
-                                  onMouseEnter={() => {
-                                      animate(".checkmark-wrapper.check .key", {y: [-5, 0], opacity: .6}, {})
-                                  }}
-                                  onMouseLeave={() => {
-                                      animate(".checkmark-wrapper.check .key", {y: [0, -5], opacity: 0}, {})
-                                  }}>
+                            <span onMouseDown={() => togglePassed()}>
                                 <Feedback type={"check"}
                                           enabled={isPassed()}/>
                             </span>
@@ -241,24 +237,12 @@ function App() {
                 </div>
             </div>
             {!(currentQuestion === 0 && type === QUESTION_TYPE.question) ? (
-                <span onMouseDown={() => switchQuestion(DIRECTION.previous)}
-                      onMouseEnter={() => {
-                          animate(".arrow-wrapper.previous .key", {y: [-5, 0], opacity: .6}, {})
-                      }}
-                      onMouseLeave={() => {
-                          animate(".arrow-wrapper.previous .key", {y: [0, -5], opacity: 0}, {})
-                      }}>
+                <span onMouseDown={() => switchQuestion(DIRECTION.previous)}>
                     <Arrow direction={DIRECTION.previous}/>
                 </span>
             ) : (<></>)}
             {!(currentQuestion === questions.length - 1 && type === QUESTION_TYPE.answer) ? (
-                <span onMouseDown={() => switchQuestion(DIRECTION.next)}
-                      onMouseEnter={() => {
-                          animate(".arrow-wrapper.next .key", {y: [-5, 0], opacity: .6}, {})
-                      }}
-                      onMouseLeave={() => {
-                          animate(".arrow-wrapper.next .key", {y: [0, -5], opacity: 0}, {})
-                      }}>
+                <span onMouseDown={() => switchQuestion(DIRECTION.next)}>
                     <Arrow direction={DIRECTION.next}/>
                 </span>
             ) : (<></>)}
@@ -269,6 +253,8 @@ function App() {
                       starredQuestions={starredQuestions}
             />
             {/*<Counter questionNumber={currentQuestion + 1} questionAmount={questions.length}/>*/}
+
+            {isHotkeyPannelToggled ? <Keymap/> : ""}
         </>
     )
 }

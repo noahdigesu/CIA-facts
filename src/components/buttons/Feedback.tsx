@@ -1,5 +1,4 @@
 import "./Feedback.scss";
-import Key from "../Key.tsx";
 import {animate} from "framer-motion";
 import {useHotkeys} from "react-hotkeys-hook";
 
@@ -26,7 +25,6 @@ function Feedback(props: Props) {
             <span className={`checkmark ${props.enabled ? "enabled" : ""}`}>
                 {props.type === "check" ? "✅" : "❌"}
             </span>
-            <Key letter={props.type === "check" ? "e" : "q"}/>
         </div>
     );
 }
