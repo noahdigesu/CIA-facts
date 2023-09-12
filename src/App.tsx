@@ -1,5 +1,6 @@
 import {useState} from 'react';
 import {useHotkeys} from 'react-hotkeys-hook';
+// @ts-ignore
 import {useLocalStorage} from "@uidotdev/usehooks";
 
 import './App.scss'
