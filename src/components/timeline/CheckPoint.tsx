@@ -3,13 +3,16 @@ import {STATE, TAG} from "../../constants/constants.tsx";
 
 type Props = {
     state: STATE,
-    tag: TAG
+    tag: TAG,
+    previousDate: string
 }
 
 function CheckPoint(props: Props) {
     return (
-        <span className={`checkpoint ${props.state} ${props.tag}`}>
-        </span>
+        <div className={"checkpoint-wrapper"}>
+            <span className={`checkpoint ${props.state} ${props.tag}`}/>
+            {props.state == "previous" ? <p className={`date ${props.state} ${props.tag}`}>{props.previousDate}</p> : <></>}
+        </div>
     );
 }
 

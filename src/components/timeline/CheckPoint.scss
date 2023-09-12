@@ -1,10 +1,40 @@
+.checkpoint-wrapper {
+  position: relative;
+}
+
+.date {
+  font-family: "Satoshi", sans-serif;
+  color: white;
+  width: max-content;
+  position: absolute;
+  bottom: -25px;
+  left: 50%;
+  transform: translate3d(-50%, 0, 0);
+
+  &.passed {
+    color: #13F287;
+  }
+
+  &.failed {
+    color: #FF4D4D;
+  }
+
+  &.starred {
+    color: #FFE073;
+  }
+
+  &.distant {
+    color: #3B3C3E;
+  }
+}
+
 .checkpoint {
   display: inline-block;
   background-color: #000;
   width: 13px;
   height: 13px;
   content: "";
-  transition: .8s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: .8s cubic-bezier(0.16, 1, 0.3, 1);
 
   // Tag
   &.incomplete, &.previous {
@@ -58,11 +88,11 @@
 
   &.distant {
     &.passed {
-      border: 1px solid #2f624b !important;
+      border: 1px solid #367f5e !important;
     }
 
     &.failed {
-      border: 1px solid #7d3d3d !important;
+      border: 1px solid #903c3c !important;
     }
 
     &.starred {
