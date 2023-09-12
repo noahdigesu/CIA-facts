@@ -13,6 +13,7 @@ type Props = {
 function Timeline(props: Props) {
     return (
         <div id={"timeline"}>
+            <div id={"line"}/>
             {props.questions.map((_question: unknown, i: number) =>
                 <span key={i}>
                     <CheckPoint

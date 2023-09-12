@@ -8,7 +8,7 @@ type Props = {
     enabled: boolean
 }
 
-function Feedback(props: Props)  {
+function Feedback(props: Props) {
     useHotkeys(props.type === "check" ? 'e' : 'q', () => animateCheck());
 
     // Todo: fix animations
