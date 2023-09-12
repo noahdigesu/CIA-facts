@@ -28,12 +28,12 @@ function App() {
     // Next question
     useHotkeys('d', () => {
         switchQuestion(DIRECTION.next);
-        animateContent(DIRECTION.next);
+        animateContent(DIRECTION.previous);
     });
     // Previous question
     useHotkeys('a', () => {
         switchQuestion(DIRECTION.previous);
-        animateContent(DIRECTION.previous);
+        animateContent(DIRECTION.next);
     });
     // Mark as starred
     useHotkeys('s', () => toggleStarred());
@@ -206,7 +206,7 @@ function App() {
             </span>
             <div className={"content-wrapper"}>
                 <div className={"content"}>
-                    <Title value={questions[currentQuestion][type]} type={type}/>
+                    <Title question={questions[currentQuestion]} type={type}/>
                     {type === "answer" ? (
                         <div className={"feedback"}>
                             <span onMouseDown={() => toggleFailed()}
