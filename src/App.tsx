@@ -10,7 +10,7 @@ import Starred from './components/buttons/Starred.tsx';
 import Feedback from "./components/buttons/Feedback.tsx";
 import Arrow from "./components/buttons/Arrow.tsx";
 
-import questions from '../public/q-a.json';
+import questions from './assets/q-a.json';
 import Timeline from "./components/timeline/Timeline.tsx";
 import {animate} from "framer-motion";
 import Counter from "./components/Counter.tsx";
