@@ -1,7 +1,11 @@
 import "./Starred.scss";
 import {animate, motion} from "framer-motion";
 
-function Starred({toggled}) {
+type Props = {
+    toggled: boolean
+}
+
+function Starred(props: Props) {
     useHotkeys('s', () => animateStar());
 
     const animateStar = () => {
@@ -16,7 +20,7 @@ function Starred({toggled}) {
         <span id={"star-wrapper"}>
             <motion.span id={"star"}
                          onMouseDown={animateStar}>
-                <Star className={toggled ? "toggled" : ""}/>
+                <Star className={props.toggled ? "toggled" : ""}/>
             </motion.span>
             <Key letter={"s"}/>
         </span>

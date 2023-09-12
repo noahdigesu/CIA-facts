@@ -1,8 +1,13 @@
 import "./Counter.scss";
 
-function Counter({questionNumber, questionAmount}) {
+type Props = {
+    questionNumber: number,
+    questionAmount: number
+}
+
+function Counter(props: Props) {
     return (
-        <p id={"counter"} style={{color: "white"}}>{questionNumber} / {questionAmount}</p>
+        <p id={"counter"} style={{color: "white"}}>{props.questionNumber} / {props.questionAmount}</p>
     )
 }
 

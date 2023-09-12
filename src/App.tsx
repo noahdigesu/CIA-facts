@@ -1,11 +1,11 @@
-import {useState} from 'react'
-import {useHotkeys} from 'react-hotkeys-hook'
+import {useState} from 'react';
+import {useHotkeys} from 'react-hotkeys-hook';
 import {useLocalStorage} from "@uidotdev/usehooks";
 
 import './App.scss'
 
-import Title from './components/Title.tsx'
-import Starred from './components/buttons/Starred.tsx'
+import Title from './components/Title.tsx';
+import Starred from './components/buttons/Starred.tsx';
 import Feedback from "./components/buttons/Feedback.tsx";
 import Arrow from "./components/buttons/Arrow.tsx";
 
@@ -14,27 +14,24 @@ import Timeline from "./components/timeline/Timeline.tsx";
 import {animate} from "framer-motion";
 import Counter from "./components/Counter.tsx";
 
-function App() {
-    const enum QUESTION_TYPE {
-        question = "question",
-        answer = "answer"
-    }
+import {DIRECTION, QUESTION_TYPE} from "./constants/constants.tsx";
 
-    const [questionNumber, setQuestionNumber] = useState(0);
-    const [type, setType] = useState(QUESTION_TYPE.question);
-    const [starredQuestions, setStarredQuestions] = useLocalStorage("starredQuestions", []);
-    const [passedQuestions, setPassedQuestions] = useLocalStorage("passedQuestions", []);
-    const [failedQuestions, setFailedQuestions] = useLocalStorage("failedQuestions", []);
+function App() {
+    const [questionNumber, setQuestionNumber] = useState<number>(0);
+    const [type, setType] = useState<QUESTION_TYPE>(QUESTION_TYPE.question);
+    const [starredQuestions, setStarredQuestions] = useLocalStorage<number[]>("starredQuestions", []);
+    const [passedQuestions, setPassedQuestions] = useLocalStorage<number[]>("passedQuestions", []);
+    const [failedQuestions, setFailedQuestions] = useLocalStorage<number[]>("failedQuestions", []);
 
     // Next question
     useHotkeys('d', () => {
-        switchQuestion("next");
-        animateContent("right");
+        switchQuestion(DIRECTION.next);
+        animateContent(DIRECTION.next);
     });
     // Previous question
     useHotkeys('a', () => {
-        switchQuestion("previous");
-        animateContent("left");
+        switchQuestion(DIRECTION.previous);
+        animateContent(DIRECTION.previous);
     });
     // Starring
     useHotkeys('s', () => toggleStarred());
@@ -49,26 +46,26 @@ function App() {
     // Go to last question
     useHotkeys('end', () => goToQuestion(questions.length - 1));
 
-    function switchQuestion(switchType) {
+    function switchQuestion(switchType: DIRECTION) {
         // Check if we're switching from a question to an answer
         const switchToAnswer = type === QUESTION_TYPE.question
-            && !(switchType === "previous" && questionNumber - 1 === -1);
+            && !(switchType === DIRECTION.previous && questionNumber - 1 === -1);
         // Check if we're switching from an answer to a question
         const switchToQuestion = type === QUESTION_TYPE.answer
-            && !(switchType === "next" && questionNumber + 1 === questions.length);
+            && !(switchType === DIRECTION.next && questionNumber + 1 === questions.length);
 
         // Update the type based on the switchType
         if (switchToAnswer) setType(QUESTION_TYPE.answer);
         else if (switchToQuestion) setType(QUESTION_TYPE.question);
 
         // Update the questionNumber based on the switchType
-        if (switchType === "previous" && type === QUESTION_TYPE.question && questionNumber > 0)
+        if (switchType === DIRECTION.previous && type === QUESTION_TYPE.question && questionNumber > 0)
             setQuestionNumber(questionNumber - 1);
-        if (switchType === "next" && type === QUESTION_TYPE.answer && questionNumber < questions.length - 1)
+        if (switchType === DIRECTION.next && type === QUESTION_TYPE.answer && questionNumber < questions.length - 1)
             setQuestionNumber(questionNumber + 1);
     }
 
-    function goToQuestion(n) {
+    function goToQuestion(n: number) {
         setQuestionNumber(n);
         setType(QUESTION_TYPE.question);
     }
@@ -79,20 +76,20 @@ function App() {
             setStarredQuestions([...starredQuestions, questionNumber]);
         } else {
             // Remove from starred
-            setStarredQuestions(starredQuestions.filter(item => item !== questionNumber));
+            setStarredQuestions(starredQuestions.filter((item: number) => item !== questionNumber));
         }
     }
 
     function toggleFailed() {
         if (type === QUESTION_TYPE.answer) {
             // reset
-            setPassedQuestions(passedQuestions.filter(item => item !== questionNumber));
+            setPassedQuestions(passedQuestions.filter((item: number) => item !== questionNumber));
             if (!failedQuestions.includes(questionNumber)) {
                 // Add to starred
                 setFailedQuestions([...failedQuestions, questionNumber]);
             } else {
                 // Remove from starred
-                setFailedQuestions(failedQuestions.filter(item => item !== questionNumber));
+                setFailedQuestions(failedQuestions.filter((item: number) => item !== questionNumber));
             }
         }
     }
@@ -100,13 +97,13 @@ function App() {
     function togglePassed() {
         if (type === QUESTION_TYPE.answer) {
             // reset
-            setFailedQuestions(failedQuestions.filter(item => item !== questionNumber));
+            setFailedQuestions(failedQuestions.filter((item: number) => item !== questionNumber));
             if (!passedQuestions.includes(questionNumber)) {
                 // Add to starred
                 setPassedQuestions([...passedQuestions, questionNumber]);
             } else {
                 // Remove from starred
-                setPassedQuestions(passedQuestions.filter(item => item !== questionNumber));
+                setPassedQuestions(passedQuestions.filter((item: number) => item !== questionNumber));
             }
         }
     }
@@ -117,10 +114,10 @@ function App() {
         setStarredQuestions([]);
     }
 
-    function animateContent(direction) {
+    function animateContent(direction: DIRECTION) {
         animate(
             `.content`,
-            {x: direction === "left" ? [-10, 0] : [10, 0]},
+            {x: direction === DIRECTION.next ? [-10, 0] : [10, 0]},
             {type: "spring", mass: .5, duration: 1}
         );
     }
@@ -138,7 +135,7 @@ function App() {
             </span>
             <div className={"content-wrapper"}>
                 <div className={"content"}>
-                    <Title value={questions[questionNumber][type]} type={type}/>
+                    <Title value={questions[questionNumber][type].toString()} type={type}/>
                     {type === "answer" ? (
                         <div className={"feedback"}>
                             <span onMouseDown={() => toggleFailed()}
@@ -166,25 +163,25 @@ function App() {
                 </div>
             </div>
             {!(questionNumber === 0 && type === QUESTION_TYPE.question) ? (
-                <span onMouseDown={() => switchQuestion("previous")}
+                <span onMouseDown={() => switchQuestion(DIRECTION.previous)}
                       onMouseEnter={() => {
-                          animate(".arrow-wrapper.left .key", {y: [-5, 0], opacity: .6}, {})
+                          animate(".arrow-wrapper.previous .key", {y: [-5, 0], opacity: .6}, {})
                       }}
                       onMouseLeave={() => {
-                          animate(".arrow-wrapper.left .key", {y: [0, -5], opacity: 0}, {})
+                          animate(".arrow-wrapper.previous .key", {y: [0, -5], opacity: 0}, {})
                       }}>
-                    <Arrow direction={"left"}/>
+                    <Arrow direction={DIRECTION.previous}/>
                 </span>
             ) : (<></>)}
             {!(questionNumber === questions.length - 1 && type === QUESTION_TYPE.answer) ? (
-                <span onMouseDown={() => switchQuestion("next")}
+                <span onMouseDown={() => switchQuestion(DIRECTION.next)}
                       onMouseEnter={() => {
-                          animate(".arrow-wrapper.right .key", {y: [-5, 0], opacity: .6}, {})
+                          animate(".arrow-wrapper.next .key", {y: [-5, 0], opacity: .6}, {})
                       }}
                       onMouseLeave={() => {
-                          animate(".arrow-wrapper.right .key", {y: [0, -5], opacity: 0}, {})
+                          animate(".arrow-wrapper.next .key", {y: [0, -5], opacity: 0}, {})
                       }}>
-                    <Arrow direction={"right"}/>
+                    <Arrow direction={DIRECTION.next}/>
                 </span>
             ) : (<></>)}
             <Timeline questions={questions}

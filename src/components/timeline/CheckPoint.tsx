@@ -1,11 +1,14 @@
 import "./CheckPoint.scss";
+import {STATE, TAG} from "../../constants/constants.tsx";
 
-function CheckPoint({
-                        state = "normal" | "previous" | "current",
-                        tag = "incomplete" | "passed" | "failed" | "starred"
-                    }) {
+type Props = {
+    state: STATE,
+    tag: TAG
+}
+
+function CheckPoint(props: Props) {
     return (
-        <span className={`checkpoint ${state} ${tag}`}>
+        <span className={`checkpoint ${props.state} ${props.tag}`}>
         </span>
     );
 }

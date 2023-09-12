@@ -4,12 +4,17 @@ import {ArrowLeft, ArrowRight} from 'react-feather';
 import {animate, motion} from "framer-motion";
 import {useHotkeys} from "react-hotkeys-hook";
 import Key from "../Key.tsx";
+import {DIRECTION} from "../../constants/constants.tsx";
 
-function Arrow({direction}) {
-    useHotkeys('d', () => animateArrow("right"));
-    useHotkeys('a', () => animateArrow("left"));
+type Props = {
+    direction: DIRECTION
+}
 
-    function animateArrow(direction) {
+function Arrow(props: Props) {
+    useHotkeys('d', () => animateArrow(DIRECTION.next));
+    useHotkeys('a', () => animateArrow(DIRECTION.previous));
+
+    function animateArrow(direction: DIRECTION) {
         animate(
             `#arrow_${direction}`,
             {x: [10, 0]},
@@ -18,14 +23,14 @@ function Arrow({direction}) {
     }
 
     return (
-        <div className={`arrow-wrapper ${direction}`}>
+        <div className={`arrow-wrapper ${props.direction}`}>
             <motion.span className={`arrow`}
-                         onMouseDown={() => animateArrow(direction)}>
-                {direction === "left" ? (
-                    <ArrowLeft id={"arrow_left"}/>
-                ) : <ArrowRight id={"arrow_right"}/>}
+                         onMouseDown={() => animateArrow(props.direction)}>
+                {props.direction === DIRECTION.previous ? (
+                    <ArrowLeft id={"arrow_previous"}/>
+                ) : <ArrowRight id={"arrow_next"}/>}
             </motion.span>
-            <Key letter={direction === "left"? "a" : "d"}/>
+            <Key letter={props.direction === DIRECTION.previous ? "a" : "d"}/>
         </div>
     );
 }

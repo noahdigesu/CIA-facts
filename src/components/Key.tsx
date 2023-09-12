@@ -1,9 +1,13 @@
 import "./Key.scss";
 
-function Key({letter}) {
+type Props = {
+    letter: string
+}
+
+function Key(props: Props) {
     return (
         <span className={"key"}>
-            {letter}
+            {props.letter}
         </span>
     );
 }

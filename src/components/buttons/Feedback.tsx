@@ -3,8 +3,13 @@ import {useHotkeys} from "react-hotkeys-hook";
 import {animate} from "framer-motion";
 import Key from "../Key.tsx";
 
-function Feedback({type, enabled}) {
-    useHotkeys(type === "check" ? 'e' : 'q', () => animateCheck());
+type Props = {
+    type: string,
+    enabled: boolean
+}
+
+function Feedback(props: Props)  {
+    useHotkeys(props.type === "check" ? 'e' : 'q', () => animateCheck());
 
     // Todo: fix animations
     const animateCheck = () => {
@@ -16,11 +21,11 @@ function Feedback({type, enabled}) {
     }
 
     return (
-        <div className={`checkmark-wrapper ${type}`}>
-            <span onMouseDown={animateCheck} className={`checkmark ${enabled ? "enabled" : ""}`}>
-                {type === "check" ? "✅" : "❌"}
+        <div className={`checkmark-wrapper ${props.type}`}>
+            <span onMouseDown={animateCheck} className={`checkmark ${props.enabled ? "enabled" : ""}`}>
+                {props.type === "check" ? "✅" : "❌"}
             </span>
-            <Key letter={type === "check" ? "e" : "q"}/>
+            <Key letter={props.type === "check" ? "e" : "q"}/>
         </div>
     );
 }
