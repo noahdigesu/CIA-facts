@@ -17,8 +17,14 @@
   border-radius: 100%;
   margin-top: .2em;
   opacity: .6;
+  user-select: none;
+  transition: opacity .6s cubic-bezier(0.16, 1, 0.3, 1);
+
+  &:hover {
+    opacity: .8;
+  }
 }
 
 .enabled {
-  opacity: 1;
+  opacity: 1!important;
 }

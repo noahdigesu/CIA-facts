@@ -1,7 +1,7 @@
 import "./Feedback.scss";
-import {useHotkeys} from "react-hotkeys-hook";
-import {animate} from "framer-motion";
 import Key from "../Key.tsx";
+import {animate} from "framer-motion";
+import {useHotkeys} from "react-hotkeys-hook";
 
 type Props = {
     type: string,
@@ -9,21 +9,21 @@ type Props = {
 }
 
 function Feedback(props: Props) {
-    // Uncaught Error: No valid element provided. when deselecting
-    useHotkeys(props.type === "check" ? 'e' : 'q', () => animateCheck());
+    useHotkeys('q', () => animateFeedback("cross"));
+    useHotkeys('e', () => animateFeedback("check"));
 
-    // Todo: fix animations
-    const animateCheck = () => {
+    function animateFeedback(type: string) {
         animate(
-            ".enabled",
+            `.checkmark-wrapper.${type} .checkmark`,
             {scale: [.8, 1]},
             {type: "spring", mass: .5, duration: 1}
         );
     }
 
     return (
-        <div className={`checkmark-wrapper ${props.type}`}>
-            <span onMouseDown={animateCheck} className={`checkmark ${props.enabled ? "enabled" : ""}`}>
+        <div className={`checkmark-wrapper ${props.type}`}
+             onClick={() => animateFeedback(props.type)}>
+            <span className={`checkmark ${props.enabled ? "enabled" : ""}`}>
                 {props.type === "check" ? "✅" : "❌"}
             </span>
             <Key letter={props.type === "check" ? "e" : "q"}/>
