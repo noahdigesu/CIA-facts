@@ -44,7 +44,7 @@ function App() {
     // Mark as failed
     useHotkeys('q', () => toggleFailed());
     // Clear all tags
-    useHotkeys('ctrl+c', () => clear(), {preventDefault: true});
+    useHotkeys('ctrl+r', () => clear(), {preventDefault: true});
     // Go to first question
     useHotkeys('home', () => goToQuestion(0));
     // Go to last question
