@@ -1,14 +1,23 @@
 import "./Timeline.scss";
 import CheckPoint from "./CheckPoint.tsx";
+import {STATE, TAG} from "../../constants/constants.tsx";
 
-function Timeline({questions, currentQuestion, failedQuestions, passedQuestions, starredQuestions}) {
+type Props = {
+    questions: object[],
+    currentQuestion: number,
+    failedQuestions: number[],
+    passedQuestions: number[],
+    starredQuestions: number[]
+}
+
+function Timeline(props: Props) {
     return (
         <div id={"timeline"}>
-            {questions.map((question, i) =>
+            {props.questions.map((_question: unknown, i: number) =>
                 <span key={i}>
-                    <CheckPoint question={question}
-                                state={i === currentQuestion ? "current" : i === currentQuestion - 1 ? "previous" : "normal"}
-                                tag={passedQuestions.includes(i) ? "passed" : failedQuestions.includes(i) ? "failed" : starredQuestions.includes(i) ? "starred" : "incomplete"}
+                    <CheckPoint
+                        state={i === props.currentQuestion ? STATE.current : i === props.currentQuestion - 1 ? STATE.previous : STATE.normal}
+                        tag={props.starredQuestions.includes(i) ? TAG.starred : props.passedQuestions.includes(i) ? TAG.passed : props.failedQuestions.includes(i) ? TAG.failed : TAG.incomplete}
                     />
                 </span>
             )}
