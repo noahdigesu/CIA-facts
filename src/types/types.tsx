@@ -1,5 +1,6 @@
 
 export type Question = {
     question: string,
-    answer: string
+    answer: string,
+    author?: string
 }

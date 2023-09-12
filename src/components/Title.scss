@@ -2,8 +2,14 @@
   font-family: "Satoshi", sans-serif;
   font-weight: bolder;
   color: white;
-  font-size: 6em;
-  max-width: 8em;
+  font-size: clamp(1rem, -0.875rem + 8.333vw, 4rem);
+  max-width: 10em;
   text-align: center;
   user-select: none;
+  display: flex;
+  flex-direction: row;
+
+  #author {
+    font-size: clamp(1rem, -0.875rem + 8.333vw, 2rem);
+  }
 }

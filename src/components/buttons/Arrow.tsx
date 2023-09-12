@@ -3,7 +3,6 @@ import "./Arrow.scss";
 import {ArrowLeft, ArrowRight} from 'react-feather';
 import {animate, motion} from "framer-motion";
 import {useHotkeys} from "react-hotkeys-hook";
-import Key from "../Key.tsx";
 import {DIRECTION} from "../../constants/constants.tsx";
 
 type Props = {
@@ -30,7 +29,6 @@ function Arrow(props: Props) {
                     <ArrowLeft id={"arrow_previous"}/>
                 ) : <ArrowRight id={"arrow_next"}/>}
             </motion.span>
-            <Key letter={props.direction === DIRECTION.previous ? "a" : "d"}/>
         </div>
     );
 }
