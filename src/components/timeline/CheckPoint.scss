@@ -28,6 +28,19 @@
   }
 }
 
+
+.highlight {
+  height: 1px;
+  width: 600%;
+  top: calc(50% - 1px);
+  right: 0;
+  content: "";
+  transform: translate3d(0, -50%, 0);
+  background: #fff;
+  position: absolute;
+  z-index: -1;
+}
+
 .checkpoint {
   display: inline-block;
   background-color: #000;
