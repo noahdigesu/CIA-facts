@@ -11,10 +11,6 @@ type Props = {
     passedQuestions: Question[],
 }
 
-// should have a solid white line
-// on top there is another line of width 0 to current question such as ((props.currentQuestion / props.questions.length) * 100) - 10
-// the gradient should be grey (#3B3C3E) until it reaches the end of the line, where the color should be ${gradientColor}.
-
 function Timeline(props: Props) {
     return (
         <div id={"timeline"}>
@@ -33,7 +29,6 @@ function Timeline(props: Props) {
                             && question.answer === props.questions[i].answer
                     });
 
-                    const gradientColor: string = isStarred ? "#FFE073" : isPassed ? "#13F287" : isFailed ? "#FF4D4D" : "#FFFFFF";
                     const state: STATE = (i === props.currentQuestion ? STATE.current : i === props.currentQuestion - 1 ? STATE.previous : i < props.currentQuestion ? STATE.distant : STATE.normal);
                     const tag: TAG = (isStarred ? TAG.starred : isPassed ? TAG.passed : isFailed ? TAG.failed : TAG.incomplete);
 
@@ -44,7 +39,6 @@ function Timeline(props: Props) {
                             previousDate={props.currentQuestion != 0 ? props.questions[props.currentQuestion - 1].answer : ""}
                             isLast={i === props.questions.length - 1}
                             isCurrent={i === props.currentQuestion}
-                            gradientColor={gradientColor}
                         />
                     </span>
                 }

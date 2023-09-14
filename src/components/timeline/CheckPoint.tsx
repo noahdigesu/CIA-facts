@@ -8,19 +8,22 @@ type Props = {
     previousDate: string,
     isLast: boolean,
     isCurrent: boolean,
-    gradientColor: string
 }
 
 function CheckPoint(props: Props) {
+    const gradientColor: string = props.tag === TAG.starred ? "#FFE073"
+        : props.tag === TAG.passed ? "#13F287"
+            : props.tag === TAG.failed ? "#FF4D4D" : "#FFFFFF";
+
     return (
         <div className={"checkpoint-wrapper"}>
-            <span className={`checkpoint ${props.state} ${props.tag} ${props.isLast ? "checkmark" : ""}`}>
-                {props.isLast ? <Check/> : ""}
+            <span className={`checkpoint ${props.state} ${props.tag} ${props.isLast ? "last" : ""}`}>
+                {props.isLast ? <Check/> : <></>}
+                {props.isCurrent ?
+                    <div className={"highlight"}
+                         style={{background: `linear-gradient(-270deg, rgba(0, 0, 0, 0) 25%, ${gradientColor} 100%)`}}/>
+                    : <></>}
             </span>
-            {props.isCurrent ?
-                <div className={"highlight"}
-                     style={{background: `linear-gradient(-270deg, rgba(0, 0, 0, 0) 25%, ${props.gradientColor} 100%)`}}/>
-                : ""}
             {props.state == "previous" ?
                 <p className={`date ${props.state} ${props.tag}`}>{props.previousDate}</p> : <></>}
         </div>
