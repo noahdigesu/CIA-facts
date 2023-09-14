@@ -1,6 +1,5 @@
 import "./CheckPoint.scss";
 import {STATE, TAG} from "../../constants/constants.tsx";
-import {Check} from "react-feather";
 
 type Props = {
     state: STATE,
@@ -17,13 +16,11 @@ function CheckPoint(props: Props) {
 
     return (
         <div className={"checkpoint-wrapper"}>
-            <span className={`checkpoint ${props.state} ${props.tag} ${props.isLast ? "last" : ""}`}>
-                {props.isLast ? <Check/> : <></>}
-                {props.isCurrent ?
-                    <div className={"highlight"}
-                         style={{background: `linear-gradient(-270deg, rgba(0, 0, 0, 0) 25%, ${gradientColor} 100%)`}}/>
-                    : <></>}
-            </span>
+            <span className={`checkpoint ${props.state} ${props.tag}`}/>
+            {props.isCurrent ?
+                <div className={"highlight"}
+                     style={{background: `linear-gradient(-270deg, rgba(0, 0, 0, 0) 25%, ${gradientColor} 100%)`}}/>
+                : <></>}
             {props.state == "previous" ?
                 <p className={`date ${props.state} ${props.tag}`}>{props.previousDate}</p> : <></>}
         </div>
