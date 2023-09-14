@@ -6,7 +6,9 @@ type Props = {
     state: STATE,
     tag: TAG,
     previousDate: string,
-    isLast: boolean
+    isLast: boolean,
+    isCurrent: boolean,
+    gradientColor: string
 }
 
 function CheckPoint(props: Props) {
@@ -15,7 +17,12 @@ function CheckPoint(props: Props) {
             <span className={`checkpoint ${props.state} ${props.tag} ${props.isLast ? "checkmark" : ""}`}>
                 {props.isLast ? <Check/> : ""}
             </span>
-            {props.state == "previous" ? <p className={`date ${props.state} ${props.tag}`}>{props.previousDate}</p> : <></>}
+            {props.isCurrent ?
+                <div className={"highlight"}
+                     style={{background: `linear-gradient(-270deg, rgba(0, 0, 0, 0) 25%, ${props.gradientColor} 100%)`}}/>
+                : ""}
+            {props.state == "previous" ?
+                <p className={`date ${props.state} ${props.tag}`}>{props.previousDate}</p> : <></>}
         </div>
     );
 }
