@@ -2,7 +2,7 @@ import {useState} from 'react';
 import {useHotkeys} from 'react-hotkeys-hook';
 // @ts-ignore
 import {useLocalStorage} from "@uidotdev/usehooks";
-import {animate} from "framer-motion";
+import {animate, motion} from "framer-motion";
 
 import './App.scss'
 import QUESTIONS from './assets/q-a.json';
@@ -21,7 +21,7 @@ import Key from "./components/pannels/keymap/Key.tsx";
 function App() {
     const [type, setType] = useState<QUESTION_TYPE>(QUESTION_TYPE.question);
     const [questions, setQuestions] = useState<Question[]>(QUESTIONS);
-    const [isHotkeyPanelToggled, setIsHotkeyPanelToggled] = useState<boolean>(false);
+    const [isKeymapToggled, setIsKeymapToggled] = useState<boolean>(false);
     const [currentQuestion, setCurrentQuestion] = useLocalStorage<number>("currentQuestion", 0);
     const [starredQuestions, setStarredQuestions] = useLocalStorage<Question[]>("starredQuestions", []);
     const [passedQuestions, setPassedQuestions] = useLocalStorage<Question[]>("passedQuestions", []);
@@ -55,13 +55,13 @@ function App() {
     // Filter by failed
     useHotkeys('shift+f', () => toggleFailedFilter(), {preventDefault: true});
     // Show Keymap panel
-    useHotkeys('h', () => toggleHotkeys());
+    useHotkeys('h', () => toggleKeymap());
     // Close panel
     useHotkeys('esc', () => closePanel());
 
     function closePanel() {
-        if (isHotkeyPanelToggled) {
-            setIsHotkeyPanelToggled(false);
+        if (isKeymapToggled) {
+            setIsKeymapToggled(false);
         }
         // todo questions deck
     }
@@ -202,22 +202,45 @@ function App() {
         setCurrentQuestion(0);
     }
 
-    function toggleHotkeys() {
-        setIsHotkeyPanelToggled(!isHotkeyPanelToggled);
-        // todo animation
-        // if (isHotkeyPannelToggled) {
-        //     animate(
-        //         "#keymap",
-        //         {y: [10, 0], opacity: [0, 1], display: ["none", "block"], transform: "translate3d(-50%, -50%, 0)"},
-        //         {type: "spring", mass: .5, duration: 1}
-        //     )
-        // } else {
-        //     animate(
-        //         "#keymap",
-        //         {y: [0, 10], opacity: [1, 0], display: ["block", "none"], transform: "translate3d(-50%, -50%, 0)"},
-        //         {type: "spring", mass: .5, duration: 1}
-        //     )
-        // }
+    function toggleKeymap() {
+        setIsKeymapToggled(!isKeymapToggled);
+        if (!isKeymapToggled) {
+            animate(
+                "#keymap-wrapper",
+                {
+                    display: "inherit",
+                    opacity: [0, 1]
+                },
+                {
+                    type: "spring",
+                    mass: .5,
+                    duration: 1
+                }
+            );
+            animate(
+                "#keymap",
+                {
+                    transform: ["translate3d(-50%, -45%, 0)", "translate3d(-50%, -50%, 0)"]
+                },
+                {
+                    type: "spring",
+                    mass: .5,
+                    duration: 1
+                }
+            );
+        } else {
+            animate(
+                "#keymap-wrapper",
+                {
+                    opacity: [1, 0],
+                },
+                {
+                    type: "spring",
+                    mass: .5,
+                    duration: 1
+                }
+            );
+        }
     }
 
     function animateContent(direction: DIRECTION) {
@@ -270,7 +293,9 @@ function App() {
             <div id={"help"}>
                 <Key letter={"h"} description={"Show help"} textPlacement={"left"}/>
             </div>
-            {isHotkeyPanelToggled ? <Keymap/> : ""}
+            <motion.div id={"keymap-wrapper"} initial={{display: "none"}} exit={{display: "none"}}>
+                <Keymap/>
+            </motion.div>
         </>
     )
 }
