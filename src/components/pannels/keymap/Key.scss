@@ -1,7 +1,8 @@
 
 .key-wrapper {
-  display: grid;
-  grid-template-columns: 0.2fr 1fr;
+  display: flex;
+  gap: 25px;
+  width: fit-content;
 }
 
 .key {

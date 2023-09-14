@@ -16,6 +16,7 @@ import Timeline from "./components/timeline/Timeline.tsx";
 import {DIRECTION, QUESTION_TYPE} from "./constants/constants.tsx";
 import {Question} from "./types/types.tsx";
 import Keymap from "./components/pannels/keymap/Keymap.tsx";
+import Key from "./components/pannels/keymap/Key.tsx";
 
 function App() {
     const [type, setType] = useState<QUESTION_TYPE>(QUESTION_TYPE.question);
@@ -54,7 +55,16 @@ function App() {
     // Filter by failed
     useHotkeys('shift+f', () => toggleFailedFilter(), {preventDefault: true});
     // Show Keymap panel
-    useHotkeys('k', () => toggleHotkeys());
+    useHotkeys('h', () => toggleHotkeys());
+    // Close panel
+    useHotkeys('esc', () => closePanel());
+
+    function closePanel() {
+        if (isHotkeyPanelToggled) {
+            setIsHotkeyPanelToggled(false);
+        }
+        // todo questions deck
+    }
 
     // todo improve
     function toggleStarredFilter() {
@@ -257,7 +267,9 @@ function App() {
                       starredQuestions={starredQuestions}
             />
             {/*<Counter questionNumber={currentQuestion + 1} questionAmount={questions.length}/>*/}
-
+            <div id={"help"}>
+                <Key letter={"h"} description={"Show help"} textPlacement={"left"}/>
+            </div>
             {isHotkeyPanelToggled ? <Keymap/> : ""}
         </>
     )
