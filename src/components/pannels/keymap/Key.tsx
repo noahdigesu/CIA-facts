@@ -14,18 +14,13 @@ function Key(props: Props) {
 
     useHotkeys(props.letter,
         (e) => {
-            console.log(e);
-            if (e.shiftKey) {
-                animateKey(`shift_${e.key.toLowerCase()}`);
-            } else {
-                animateKey(e.key.toLowerCase())
-            }
+            if (e.shiftKey) animateKey(`shift_${e.key.toLowerCase()}`);
+            else animateKey(e.key.toLowerCase())
         },
         {preventDefault: true}
     );
 
     function animateKey(key: string) {
-        console.log(`.key.${key}`);
         animate(
             `.key.${key}`,
             {

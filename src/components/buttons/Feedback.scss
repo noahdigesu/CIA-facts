@@ -23,8 +23,8 @@
   &:hover {
     opacity: .8;
   }
-}
 
-.enabled {
-  opacity: 1!important;
+  &.enabled {
+    opacity: 1!important;
+  }
 }
