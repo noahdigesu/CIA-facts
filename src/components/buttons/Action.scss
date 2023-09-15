@@ -52,6 +52,7 @@
 
 .menu.toggled {
   background-color: #fff;
+
   svg {
     color: #000;
   }
@@ -60,8 +61,11 @@
 .cross,.check {
   opacity: .6;
   transition: opacity .6s cubic-bezier(0.16, 1, 0.3, 1),
-    border .6s cubic-bezier(0.16, 1, 0.3, 1),
-    color .6s cubic-bezier(0.16, 1, 0.3, 1);
+    border .6s cubic-bezier(0.16, 1, 0.3, 1);
+
+  svg {
+    transition: color .6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
 
   &:hover {
     opacity: 1;
@@ -71,6 +75,7 @@
 .cross.toggled {
   opacity: 1;
   border: 2px solid #FF4D4D;
+
   svg {
     color: #FF4D4D;
   }
@@ -79,6 +84,7 @@
 .check.toggled {
   opacity: 1;
   border: 2px solid #13F287;
+
   svg {
     color: #13F287;
   }

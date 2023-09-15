@@ -17,6 +17,7 @@ import {DIRECTION, QUESTION_TYPE, TAG} from "./constants/constants.tsx";
 import {Question} from "./types/types.tsx";
 import Keymap from "./components/pannels/keymap/Keymap.tsx";
 import Key from "./components/pannels/keymap/Key.tsx";
+import Deck from "./components/pannels/deck/Deck.tsx";
 
 const DECKS = { default: DEFAULT, os: OS }
 
@@ -24,7 +25,7 @@ function App() {
     const [type, setType] = useState<QUESTION_TYPE>(QUESTION_TYPE.question);
     const [questions, setQuestions] = useState<Question[]>(DECKS.default);
     const [isKeymapToggled, setIsKeymapToggled] = useState<boolean>(false);
-    const [isMenuToggled, setIsMenuToggled] = useState<boolean>(false);
+    const [isDeckToggled, setIsDeckToggled] = useState<boolean>(false);
     const [filter, setFilter] = useState<string>("none");
     const [currentQuestion, setCurrentQuestion] = useLocalStorage<number>("currentQuestion", 0);
     const [starredQuestions, setStarredQuestions] = useLocalStorage<Question[]>("starredQuestions", []);
@@ -59,8 +60,8 @@ function App() {
     useHotkeys('shift+f', () => toggleFailedFilter(), {preventDefault: true});
     // Show Keymap panel
     useHotkeys('h', () => toggleKeymapPanel());
-    // Show Menu panel
-    useHotkeys('m', () => setIsMenuToggled(!isMenuToggled));
+    // Show Deck panel
+    useHotkeys('m', () => toggleDeckPanel());
     // Close panel
     useHotkeys('esc', () => closePanel());
     // ! Temp
@@ -72,7 +73,7 @@ function App() {
 
     function closePanel() {
         if (isKeymapToggled) setIsKeymapToggled(false);
-        if (isMenuToggled) setIsMenuToggled(false);
+        if (isDeckToggled) setIsDeckToggled(false);
     }
 
     function toggleFilter(tag: string, questions: Question[]) {
@@ -203,6 +204,7 @@ function App() {
     }
 
     function toggleKeymapPanel() {
+        if (isDeckToggled) toggleDeckPanel();
         setIsKeymapToggled(!isKeymapToggled);
         if (!isKeymapToggled) {
             animate(
@@ -244,6 +246,49 @@ function App() {
         }
     }
 
+    function toggleDeckPanel() {
+        if (isKeymapToggled) toggleKeymapPanel();
+        setIsDeckToggled(!isDeckToggled);
+        if (!isDeckToggled) {
+            animate(
+                "#deck-wrapper",
+                {
+                    display: "inherit",
+                    opacity: [0, 1]
+                },
+                {
+                    type: "spring",
+                    mass: .5,
+                    duration: 1
+                }
+            );
+            animate(
+                "#deck",
+                {
+                    transform: ["translate3d(-50%, -45%, 0)", "translate3d(-50%, -50%, 0)"]
+                },
+                {
+                    type: "spring",
+                    mass: .5,
+                    duration: 1
+                }
+            );
+        } else {
+            animate(
+                "#deck-wrapper",
+                {
+                    opacity: [1, 0],
+                    display: "none"
+                },
+                {
+                    type: "spring",
+                    mass: .5,
+                    duration: 1
+                }
+            );
+        }
+    }
+
     function animateContent(direction: DIRECTION) {
         animate(
             `.content`,
@@ -257,8 +302,8 @@ function App() {
             <span onMouseDown={() => toggleStarred()}>
                 <Action isToggled={isStarred()} icon={"star"} hotkey={"s"}/>
             </span>
-            <span onMouseDown={() => setIsMenuToggled(!isMenuToggled)}>
-                <Action isToggled={isMenuToggled} icon={"menu"} hotkey={"m"}/>
+            <span onMouseDown={() => setIsDeckToggled(!isDeckToggled)}>
+                <Action isToggled={isDeckToggled} icon={"menu"} hotkey={"m"}/>
             </span>
             <div className={"content-wrapper"}>
                 <div className={"content"}>
@@ -297,6 +342,9 @@ function App() {
             </div>
             <motion.div id={"keymap-wrapper"} initial={{display: "none"}} exit={{display: "none"}}>
                 <Keymap/>
+            </motion.div>
+            <motion.div id={"deck-wrapper"} initial={{display: "none"}} exit={{display: "none"}}>
+                <Deck/>
             </motion.div>
         </>
     )

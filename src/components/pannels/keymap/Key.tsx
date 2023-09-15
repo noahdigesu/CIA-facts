@@ -9,14 +9,13 @@ type Props = {
 }
 
 function Key(props: Props) {
-    useHotkeys(props.letter,
-        (e) => {
-            animateKey(e.key, e.shiftKey);
-        },
-        {preventDefault: true}
+    useHotkeys(props.letter, (e) => animateKey(e.key, e.shiftKey), {preventDefault: true}
     );
 
     function sanitizeLetter(letter: string) {
+        if (letter === "1") return "one";
+        if (letter === "2") return "two";
+        if (letter === "3") return "three";
         return letter.replace(" + ", "_").trim().toLowerCase();
     }
 
