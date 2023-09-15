@@ -1,6 +1,7 @@
 import "./Feedback.scss";
 import {animate} from "framer-motion";
 import {useHotkeys} from "react-hotkeys-hook";
+import {Check, X} from "react-feather";
 
 type Props = {
     type: string,
@@ -23,7 +24,7 @@ function Feedback(props: Props) {
         <div className={`checkmark-wrapper ${props.type}`}
              onClick={() => animateFeedback(props.type)}>
             <span className={`checkmark ${props.enabled ? "enabled" : ""}`}>
-                {props.type === "check" ? "✅" : "❌"}
+                {props.type === "check" ? <Check/> : <X/>}
             </span>
         </div>
     );
