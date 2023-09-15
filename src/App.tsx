@@ -24,13 +24,13 @@ const DECKS = {default: DEFAULT, os: OS, web: WEB}
 function App() {
     const [type, setType] = useState<QUESTION_TYPE>(QUESTION_TYPE.question);
     const [questions, setQuestions] = useState<Question[]>(DECKS.default);
-    const [isDeckToggled, setIsDeckToggled] = useState<boolean>(false);
-    const [isKeymapToggled, setIsKeymapToggled] = useState<boolean>(false);
-    const [filter, setFilter] = useState<string>("none");
     const [currentQuestion, setCurrentQuestion] = useLocalStorage<number>("currentQuestion", 0);
     const [starredQuestions, setStarredQuestions] = useLocalStorage<Question[]>("starredQuestions", []);
     const [passedQuestions, setPassedQuestions] = useLocalStorage<Question[]>("passedQuestions", []);
     const [failedQuestions, setFailedQuestions] = useLocalStorage<Question[]>("failedQuestions", []);
+    const [isDeckToggled, setIsDeckToggled] = useState<boolean>(false);
+    const [isKeymapToggled, setIsKeymapToggled] = useState<boolean>(false);
+    const [filter, setFilter] = useState<string>(TAG.none);
 
     // Next question
     useHotkeys('d', () => {
@@ -66,6 +66,9 @@ function App() {
     useHotkeys('3', () => changeDeck("web"));
 
     function changeDeck(deck: string) {
+        setCurrentQuestion(0);
+        setType(QUESTION_TYPE.question);
+
         switch (deck) {
             case "default":
                 setQuestions(DECKS.default);
@@ -79,14 +82,14 @@ function App() {
         }
     }
 
-    function toggleFilter(tag: string, questions: Question[]) {
+    function toggleFilter(tag: TAG, questions: Question[]) {
         if (filter !== tag && questions.length > 0) {
             setQuestions(questions);
             setCurrentQuestion(0);
             setFilter(tag);
         } else if (filter === tag) {
             setQuestions(DECKS.default);
-            setFilter("none");
+            setFilter(TAG.none);
         }
     }
 

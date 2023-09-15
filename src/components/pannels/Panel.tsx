@@ -19,7 +19,10 @@ function Panel(props: Props) {
     }
 
     function close() {
-        if (props.toggled) animateOut();
+        if (props.toggled) {
+            animateOut();
+            props.setToggled(false)
+        }
     }
 
     function animateIn() {

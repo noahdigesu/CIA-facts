@@ -5,9 +5,9 @@ import {Bookmark, Check, Star, X} from 'react-feather';
 
 type Props = {
     toggled: boolean,
-    onMouseDown?: () => void,
     icon: "bookmark" | "star" | "cross" | "check",
-    hotkey: string
+    hotkey: string,
+    onMouseDown?: () => void
 }
 
 function Action(props: Props) {

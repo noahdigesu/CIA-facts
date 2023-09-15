@@ -16,5 +16,6 @@ export const enum TAG {
     incomplete = "incomplete",
     passed = "passed",
     failed = "failed",
-    starred = "starred"
+    starred = "starred",
+    none = "none"
 }

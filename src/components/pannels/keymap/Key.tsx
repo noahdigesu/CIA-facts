@@ -3,8 +3,8 @@ import {useHotkeys} from "react-hotkeys-hook";
 import {animate} from "framer-motion";
 
 type Props = {
-    type?: string,
     letter: string,
+    type?: string,
     description?: string,
     onMouseDown?: () => void
 }
