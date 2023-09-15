@@ -1,10 +1,41 @@
 [
   {
-    "question": "f",
-    "answer": "1969"
+    "question": "Birth of the web",
+    "answer": "1989",
+    "author": "Tim Berners Lee"
   },
   {
-    "question": "f",
-    "answer": "1969"
+    "question": "WorldWideWeb browser (later Nexus)",
+    "answer": "1990",
+    "author": "Tim Berners Lee"
+  },
+  {
+    "question": "Line mode browser 1.1",
+    "answer": "1992"
+  },
+  {
+    "question": "ViolaWWW (for X Windows)",
+    "answer": "1992"
+  },
+  {
+    "question": "NCSA Mosaic (for X Windows)",
+    "answer": "1993"
+  },
+  {
+    "question": "Netscape Navigator",
+    "answer": "1994"
+  },
+  {
+    "question": "W3C (World Wide Web Consortium) founded",
+    "answer": "1994"
+  },
+  {
+    "question": "Internet Explorer",
+    "answer": "1995",
+    "author": "Microsoft"
+  },
+  {
+    "question": "Browser war",
+    "answer": "1995"
   }
 ]
