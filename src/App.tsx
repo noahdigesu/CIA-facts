@@ -291,8 +291,9 @@ function App() {
                       passedQuestions={passedQuestions}
                       starredQuestions={starredQuestions}
             />
-            <div id={"help"}>
-                <Key letter={"h"} description={"Show help"} textPlacement={"left"}/>
+            <div id={"help"} onClick={() => toggleKeymapPanel()} style={{cursor: "pointer"}}>
+                {/*Todo : tooltip on hover */}
+                <Key letter={"h"}/>
             </div>
             <motion.div id={"keymap-wrapper"} initial={{display: "none"}} exit={{display: "none"}}>
                 <Keymap/>
