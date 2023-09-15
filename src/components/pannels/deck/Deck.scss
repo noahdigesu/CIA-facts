@@ -1,0 +1,18 @@
+#deck {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate3d(-50%, -50%, 0);
+  width: 700px;
+  height: 50%;
+  border: 1px solid rgba(255, 255, 255, .5);
+  background-color: rgba(0, 0, 0, .9);
+  border-radius: .5em;
+  padding: 0 3em 2em 3em;
+}
+
+.keys {
+  display: flex;
+  flex-direction: column;
+  row-gap: 1em;
+}

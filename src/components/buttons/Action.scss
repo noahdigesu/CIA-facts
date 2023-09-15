@@ -1,0 +1,91 @@
+.action-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+#star-action-wrapper {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+
+#bookmark-action-wrapper {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+}
+
+.action {
+  border: 2px solid white;
+  border-radius: 100%;
+  width: 3em;
+  height: 3em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  outline: none;
+
+  svg {
+    color: white;
+    width: 1.2em;
+  }
+}
+
+.star,.bookmark {
+  &:hover {
+    background-color: white;
+    transition: background-color .6s cubic-bezier(0.16, 1, 0.3, 1);
+
+    svg {
+      color: #000;
+    }
+  }
+}
+
+.star.toggled svg {
+  color: #EEC532 !important;
+  fill: #EEC532;
+}
+
+.bookmark.toggled {
+  background-color: #fff;
+
+  svg {
+    color: #000;
+  }
+}
+
+.cross,.check {
+  opacity: .6;
+  transition: opacity .6s cubic-bezier(0.16, 1, 0.3, 1),
+    border .6s cubic-bezier(0.16, 1, 0.3, 1);
+
+  svg {
+    transition: color .6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.cross.toggled {
+  opacity: 1;
+  border: 2px solid #FF4D4D;
+
+  svg {
+    color: #FF4D4D;
+  }
+}
+
+.check.toggled {
+  opacity: 1;
+  border: 2px solid #13F287;
+
+  svg {
+    color: #13F287;
+  }
+}

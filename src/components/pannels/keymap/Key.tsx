@@ -4,23 +4,27 @@ import {animate} from "framer-motion";
 
 type Props = {
     type?: string,
-    textPlacement?: string,
     letter: string,
-    description: string
+    description?: string,
 }
 
 function Key(props: Props) {
-    const letter = props.letter.replace(" + ", "_").trim();
-
     useHotkeys(props.letter,
-        (e) => {
-            if (e.shiftKey) animateKey(`shift_${e.key.toLowerCase()}`);
-            else animateKey(e.key.toLowerCase())
-        },
+        (e) => animateKey(e.key, e.shiftKey),
         {preventDefault: true}
     );
 
-    function animateKey(key: string) {
+    function sanitizeLetter(letter: string) {
+        if (letter === "1") return "one";
+        if (letter === "2") return "two";
+        if (letter === "3") return "three";
+        return letter.replace(" + ", "_").trim().toLowerCase();
+    }
+
+    function animateKey(key: string, shift: boolean = false) {
+        key = sanitizeLetter(key);
+        if (shift) key = "shift_" + key;
+
         animate(
             `.key.${key}`,
             {
@@ -32,12 +36,13 @@ function Key(props: Props) {
                 type: "spring",
                 mass: .5,
                 duration: 1
-            })
+            }
+        );
     }
 
     return (
-        <div className={"key-wrapper"} style={{flexDirection: props.textPlacement === "left" ? "row-reverse" : "row"}}>
-            <span className={`key ${props.type} ${letter}`}>
+        <div className={"key-wrapper"} onClick={() => animateKey(sanitizeLetter(props.letter))}>
+            <span className={`key ${props.type} ${sanitizeLetter(props.letter)}`}>
                 {props.letter}
             </span>
             <span className={"description"}>
