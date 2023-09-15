@@ -2,11 +2,12 @@ import {useState} from 'react';
 import {useHotkeys} from 'react-hotkeys-hook';
 // @ts-ignore
 import {useLocalStorage} from "@uidotdev/usehooks";
-import {animate, motion} from "framer-motion";
+import {animate} from "framer-motion";
 
 import './App.scss'
 import DEFAULT from './assets/default.json';
 import OS from './assets/oses.json';
+import WEB from './assets/web.json';
 
 import Title from './components/Title.tsx';
 import Action from './components/buttons/Action.tsx';
@@ -19,7 +20,7 @@ import Keymap from "./components/pannels/keymap/Keymap.tsx";
 import Key from "./components/pannels/keymap/Key.tsx";
 import Deck from "./components/pannels/deck/Deck.tsx";
 
-const DECKS = { default: DEFAULT, os: OS }
+const DECKS = {default: DEFAULT, os: OS, web: WEB}
 
 function App() {
     const [type, setType] = useState<QUESTION_TYPE>(QUESTION_TYPE.question);
@@ -58,17 +59,31 @@ function App() {
     useHotkeys('shift+s', () => toggleStarredFilter(), {preventDefault: true});
     // Filter by failed
     useHotkeys('shift+f', () => toggleFailedFilter(), {preventDefault: true});
-    // Show Keymap panel
+    // Toggle keymap panel
     useHotkeys('h', () => toggleKeymapPanel());
-    // Show Deck panel
+    // Toggle deck panel
     useHotkeys('m', () => toggleDeckPanel());
     // Close panel
     useHotkeys('esc', () => closePanel());
-    // ! Temp
-    useHotkeys('x', () => changeDeck());
+    // Change to default deck
+    useHotkeys('1', () => changeDeck("default"));
+    // Change to OS deck
+    useHotkeys('2', () => changeDeck("os"));
+    // Change to web deck
+    useHotkeys('3', () => changeDeck("web"));
 
-    function changeDeck() {
-        setQuestions(DECKS.os);
+    function changeDeck(deck: string) {
+        switch (deck) {
+            case "default":
+                setQuestions(DECKS.default);
+                break;
+            case "os":
+                setQuestions(DECKS.os);
+                break;
+            case "web":
+                setQuestions(DECKS.web);
+                break;
+        }
     }
 
     function closePanel() {
@@ -203,90 +218,16 @@ function App() {
         setCurrentQuestion(0);
     }
 
-    function toggleKeymapPanel() {
-        if (isDeckToggled) toggleDeckPanel();
-        setIsKeymapToggled(!isKeymapToggled);
-        if (!isKeymapToggled) {
-            animate(
-                "#keymap-wrapper",
-                {
-                    display: "inherit",
-                    opacity: [0, 1]
-                },
-                {
-                    type: "spring",
-                    mass: .5,
-                    duration: 1
-                }
-            );
-            animate(
-                "#keymap",
-                {
-                    transform: ["translate3d(-50%, -45%, 0)", "translate3d(-50%, -50%, 0)"]
-                },
-                {
-                    type: "spring",
-                    mass: .5,
-                    duration: 1
-                }
-            );
-        } else {
-            animate(
-                "#keymap-wrapper",
-                {
-                    opacity: [1, 0],
-                    display: "none"
-                },
-                {
-                    type: "spring",
-                    mass: .5,
-                    duration: 1
-                }
-            );
-        }
-    }
-
     function toggleDeckPanel() {
+        console.log("isDeckToggled", isDeckToggled);
         if (isKeymapToggled) toggleKeymapPanel();
         setIsDeckToggled(!isDeckToggled);
-        if (!isDeckToggled) {
-            animate(
-                "#deck-wrapper",
-                {
-                    display: "inherit",
-                    opacity: [0, 1]
-                },
-                {
-                    type: "spring",
-                    mass: .5,
-                    duration: 1
-                }
-            );
-            animate(
-                "#deck",
-                {
-                    transform: ["translate3d(-50%, -45%, 0)", "translate3d(-50%, -50%, 0)"]
-                },
-                {
-                    type: "spring",
-                    mass: .5,
-                    duration: 1
-                }
-            );
-        } else {
-            animate(
-                "#deck-wrapper",
-                {
-                    opacity: [1, 0],
-                    display: "none"
-                },
-                {
-                    type: "spring",
-                    mass: .5,
-                    duration: 1
-                }
-            );
-        }
+    }
+
+    function toggleKeymapPanel() {
+        console.log("isKeymapToggled", isKeymapToggled);
+        if (isDeckToggled) toggleDeckPanel();
+        setIsKeymapToggled(!isKeymapToggled);
     }
 
     function animateContent(direction: DIRECTION) {
@@ -300,10 +241,11 @@ function App() {
     return (
         <>
             <span onMouseDown={() => toggleStarred()}>
-                <Action isToggled={isStarred()} icon={"star"} hotkey={"s"}/>
+                <Action toggled={isStarred()} icon={"star"} hotkey={"s"}/>
             </span>
-            <span onMouseDown={() => setIsDeckToggled(!isDeckToggled)}>
-                <Action isToggled={isDeckToggled} icon={"menu"} hotkey={"m"}/>
+            <span onMouseDown={() => toggleDeckPanel()}>
+                {/*Show current chapter*/}
+                <Action toggled={isDeckToggled} icon={"bookmark"} hotkey={"m"}/>
             </span>
             <div className={"content-wrapper"}>
                 <div className={"content"}>
@@ -311,10 +253,10 @@ function App() {
                     {type === "answer" ? (
                         <div className={"feedback"}>
                             <span onMouseDown={() => toggleFailed()}>
-                                <Action isToggled={isFailed()} icon={"cross"} hotkey={"f"}/>
+                                <Action toggled={isFailed()} icon={"cross"} hotkey={"f"}/>
                             </span>
                             <span onMouseDown={() => togglePassed()}>
-                                <Action isToggled={isPassed()} icon={"check"} hotkey={"c"}/>
+                                <Action toggled={isPassed()} icon={"check"} hotkey={"c"}/>
                             </span>
                         </div>
                     ) : (<></>)}
@@ -340,12 +282,8 @@ function App() {
                 {/*Todo : tooltip on hover */}
                 <Key letter={"h"}/>
             </div>
-            <motion.div id={"keymap-wrapper"} initial={{display: "none"}} exit={{display: "none"}}>
-                <Keymap/>
-            </motion.div>
-            <motion.div id={"deck-wrapper"} initial={{display: "none"}} exit={{display: "none"}}>
-                <Deck/>
-            </motion.div>
+            <Deck toggled={isDeckToggled}/>
+            <Keymap toggled={isKeymapToggled}/>
         </>
     )
 }

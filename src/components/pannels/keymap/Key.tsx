@@ -9,7 +9,9 @@ type Props = {
 }
 
 function Key(props: Props) {
-    useHotkeys(props.letter, (e) => animateKey(e.key, e.shiftKey), {preventDefault: true}
+    useHotkeys(props.letter,
+        (e) => animateKey(e.key, e.shiftKey),
+        {preventDefault: true}
     );
 
     function sanitizeLetter(letter: string) {

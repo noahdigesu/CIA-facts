@@ -1,11 +1,11 @@
 import "./Action.scss";
 import {animate, motion} from "framer-motion";
 import {useHotkeys} from 'react-hotkeys-hook';
-import {Check, Menu, Star, X} from 'react-feather';
+import {Bookmark, Check, Star, X} from 'react-feather';
 
 type Props = {
-    isToggled: boolean,
-    icon: "menu" | "star" | "cross" | "check",
+    toggled: boolean,
+    icon: "bookmark" | "star" | "cross" | "check",
     hotkey: string
 }
 
@@ -22,13 +22,13 @@ function Action(props: Props) {
 
     return (
         <span className={`action-wrapper`} id={`${props.icon}-action-wrapper`}>
-            <motion.span className={`${props.icon} action ${props.isToggled ? "toggled" : ""}`}
+            <motion.span className={`${props.icon} action ${props.toggled ? "toggled" : ""}`}
                          onMouseDown={animateAction}>
                 {props.icon === "star"
                     ? <Star/>
                     : <></>}
-                {props.icon === "menu"
-                    ? <Menu/>
+                {props.icon === "bookmark"
+                    ? <Bookmark/>
                     : <></>}
                 {props.icon === "cross"
                     ? <X/>

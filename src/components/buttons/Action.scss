@@ -11,7 +11,7 @@
   right: 20px;
 }
 
-#menu-action-wrapper {
+#bookmark-action-wrapper {
   position: absolute;
   top: 20px;
   left: 20px;
@@ -34,7 +34,7 @@
   }
 }
 
-.star,.menu {
+.star,.bookmark {
   &:hover {
     background-color: white;
     transition: background-color .6s cubic-bezier(0.16, 1, 0.3, 1);
@@ -50,7 +50,7 @@
   fill: #EEC532;
 }
 
-.menu.toggled {
+.bookmark.toggled {
   background-color: #fff;
 
   svg {
