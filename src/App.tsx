@@ -25,8 +25,8 @@ const DECKS = {default: DEFAULT, os: OS, web: WEB}
 function App() {
     const [type, setType] = useState<QUESTION_TYPE>(QUESTION_TYPE.question);
     const [questions, setQuestions] = useState<Question[]>(DECKS.default);
-    const [isKeymapToggled, setIsKeymapToggled] = useState<boolean>(false);
     const [isDeckToggled, setIsDeckToggled] = useState<boolean>(false);
+    const [isKeymapToggled, setIsKeymapToggled] = useState<boolean>(false);
     const [filter, setFilter] = useState<string>("none");
     const [currentQuestion, setCurrentQuestion] = useLocalStorage<number>("currentQuestion", 0);
     const [starredQuestions, setStarredQuestions] = useLocalStorage<Question[]>("starredQuestions", []);
@@ -56,15 +56,13 @@ function App() {
     // Go to last question
     useHotkeys('end', () => goToQuestion(questions.length - 1));
     // Filter by starred
-    useHotkeys('shift+s', () => toggleStarredFilter(), {preventDefault: true});
+    useHotkeys('shift+s', () => toggleFilter(TAG.starred, starredQuestions), {preventDefault: true});
     // Filter by failed
-    useHotkeys('shift+f', () => toggleFailedFilter(), {preventDefault: true});
+    useHotkeys('shift+f', () => toggleFilter(TAG.failed, failedQuestions), {preventDefault: true});
     // Toggle keymap panel
-    useHotkeys('h', () => toggleKeymapPanel());
+    useHotkeys('h', () => setIsKeymapToggled(!isKeymapToggled));
     // Toggle deck panel
-    useHotkeys('m', () => toggleDeckPanel());
-    // Close panel
-    useHotkeys('esc', () => closePanel());
+    useHotkeys('m', () => setIsDeckToggled(!isDeckToggled));
     // Change to default deck
     useHotkeys('1', () => changeDeck("default"));
     // Change to OS deck
@@ -86,11 +84,6 @@ function App() {
         }
     }
 
-    function closePanel() {
-        if (isKeymapToggled) setIsKeymapToggled(false);
-        if (isDeckToggled) setIsDeckToggled(false);
-    }
-
     function toggleFilter(tag: string, questions: Question[]) {
         if (filter !== tag && questions.length > 0) {
             setQuestions(questions);
@@ -100,14 +93,6 @@ function App() {
             setQuestions(DECKS.default);
             setFilter("none");
         }
-    }
-
-    function toggleStarredFilter() {
-        toggleFilter(TAG.starred, starredQuestions);
-    }
-
-    function toggleFailedFilter() {
-        toggleFilter(TAG.failed, failedQuestions);
     }
 
     function switchQuestion(switchType: DIRECTION) {
@@ -218,18 +203,6 @@ function App() {
         setCurrentQuestion(0);
     }
 
-    function toggleDeckPanel() {
-        console.log("isDeckToggled", isDeckToggled);
-        if (isKeymapToggled) toggleKeymapPanel();
-        setIsDeckToggled(!isDeckToggled);
-    }
-
-    function toggleKeymapPanel() {
-        console.log("isKeymapToggled", isKeymapToggled);
-        if (isDeckToggled) toggleDeckPanel();
-        setIsKeymapToggled(!isKeymapToggled);
-    }
-
     function animateContent(direction: DIRECTION) {
         animate(
             `.content`,
@@ -243,7 +216,10 @@ function App() {
             <span onMouseDown={() => toggleStarred()}>
                 <Action toggled={isStarred()} icon={"star"} hotkey={"s"}/>
             </span>
-            <span onMouseDown={() => toggleDeckPanel()}>
+            <span onMouseDown={() => {
+                setIsDeckToggled(false);
+                setIsKeymapToggled(!isKeymapToggled)
+            }}>
                 {/*Show current chapter*/}
                 <Action toggled={isDeckToggled} icon={"bookmark"} hotkey={"m"}/>
             </span>
@@ -278,10 +254,14 @@ function App() {
                       passedQuestions={passedQuestions}
                       starredQuestions={starredQuestions}
             />
-            <div id={"help"} onClick={() => toggleKeymapPanel()} style={{cursor: "pointer"}}>
+            <div id={"help"} onClick={() => {
+                setIsKeymapToggled(false);
+                setIsDeckToggled(!isDeckToggled)
+            }} style={{cursor: "pointer"}}>
                 {/*Todo : tooltip on hover */}
                 <Key letter={"h"}/>
             </div>
+
             <Deck toggled={isDeckToggled}/>
             <Keymap toggled={isKeymapToggled}/>
         </>

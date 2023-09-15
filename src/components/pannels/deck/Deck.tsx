@@ -9,47 +9,56 @@ type Props = {
 }
 
 function Deck(props: Props) {
-    useHotkeys('m', () => toggleDeckPanel());
+    useHotkeys('m', () => togglePanel());
+    useHotkeys('esc', () => close());
 
-    function toggleDeckPanel() {
-        if (!props.toggled) {
-            animate(
-                "#deck-wrapper",
-                {
-                    display: "inherit",
-                    opacity: [0, 1]
-                },
-                {
-                    type: "spring",
-                    mass: .5,
-                    duration: 1
-                }
-            );
-            animate(
-                "#deck",
-                {
-                    transform: ["translate3d(-50%, -45%, 0)", "translate3d(-50%, -50%, 0)"]
-                },
-                {
-                    type: "spring",
-                    mass: .5,
-                    duration: 1
-                }
-            );
-        } else {
-            animate(
-                "#deck-wrapper",
-                {
-                    opacity: [1, 0],
-                    display: "none"
-                },
-                {
-                    type: "spring",
-                    mass: .5,
-                    duration: 1
-                }
-            );
-        }
+    function close() {
+        if (props.toggled) animateOut();
+    }
+
+    function animateIn() {
+        animate(
+            "#deck-wrapper",
+            {
+                display: "inherit",
+                opacity: [0, 1]
+            },
+            {
+                type: "spring",
+                mass: .5,
+                duration: 1
+            }
+        );
+        animate(
+            "#deck",
+            {
+                transform: ["translate3d(-50%, -45%, 0)", "translate3d(-50%, -50%, 0)"]
+            },
+            {
+                type: "spring",
+                mass: .5,
+                duration: 1
+            }
+        );
+    }
+
+    function animateOut() {
+        animate(
+            "#deck-wrapper",
+            {
+                opacity: [1, 0],
+                display: "none"
+            },
+            {
+                type: "spring",
+                mass: .5,
+                duration: 1
+            }
+        );
+    }
+
+    function togglePanel() {
+        !props.toggled ? animateIn() : animateOut();
     }
 
     return (

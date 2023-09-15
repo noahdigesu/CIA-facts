@@ -10,47 +10,58 @@ type Props = {
 }
 
 function Keymap(props: Props) {
-    useHotkeys('h', () => toggleKeymapPanel());
+    // const [isToggled, setIsToggled] = useState<boolean>(false);
 
-    function toggleKeymapPanel() {
-        if (!props.toggled) {
-            animate(
-                "#keymap-wrapper",
-                {
-                    display: "inherit",
-                    opacity: [0, 1]
-                },
-                {
-                    type: "spring",
-                    mass: .5,
-                    duration: 1
-                }
-            );
-            animate(
-                "#keymap",
-                {
-                    transform: ["translate3d(-50%, -45%, 0)", "translate3d(-50%, -50%, 0)"]
-                },
-                {
-                    type: "spring",
-                    mass: .5,
-                    duration: 1
-                }
-            );
-        } else {
-            animate(
-                "#keymap-wrapper",
-                {
-                    opacity: [1, 0],
-                    display: "none"
-                },
-                {
-                    type: "spring",
-                    mass: .5,
-                    duration: 1
-                }
-            );
-        }
+    useHotkeys('h', () => togglePanel());
+    useHotkeys('esc', () => close());
+
+    function close() {
+        if (props.toggled) animateOut();
+    }
+
+    function animateIn() {
+        animate(
+            "#keymap-wrapper",
+            {
+                display: "inherit",
+                opacity: [0, 1]
+            },
+            {
+                type: "spring",
+                mass: .5,
+                duration: 1
+            }
+        );
+        animate(
+            "#keymap",
+            {
+                transform: ["translate3d(-50%, -45%, 0)", "translate3d(-50%, -50%, 0)"]
+            },
+            {
+                type: "spring",
+                mass: .5,
+                duration: 1
+            }
+        );
+    }
+
+    function animateOut() {
+        animate(
+            "#keymap-wrapper",
+            {
+                opacity: [1, 0],
+                display: "none"
+            },
+            {
+                type: "spring",
+                mass: .5,
+                duration: 1
+            }
+        );
+    }
+
+    function togglePanel() {
+        !props.toggled ? animateIn() : animateOut();
     }
 
     return (
