@@ -6,7 +6,8 @@ import {useHotkeys} from "react-hotkeys-hook";
 import {DIRECTION} from "../../constants/constants.tsx";
 
 type Props = {
-    direction: DIRECTION
+    direction: DIRECTION,
+    onMouseDown: () => void
 }
 
 function Arrow(props: Props) {
@@ -34,7 +35,7 @@ function Arrow(props: Props) {
     }
 
     return (
-        <div className={`arrow-wrapper ${props.direction}`}>
+        <div className={`arrow-wrapper ${props.direction}`} onMouseDown={props.onMouseDown}>
             <motion.span className={`arrow`}
                          onMouseDown={() => animateArrow(props.direction)}>
                 {props.direction === DIRECTION.previous ? (

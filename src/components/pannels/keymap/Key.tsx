@@ -6,6 +6,7 @@ type Props = {
     type?: string,
     letter: string,
     description?: string,
+    onMouseDown?: () => void
 }
 
 function Key(props: Props) {
@@ -42,7 +43,7 @@ function Key(props: Props) {
 
     return (
         <div className={"key-wrapper"} onClick={() => animateKey(sanitizeLetter(props.letter))}>
-            <span className={`key ${props.type} ${sanitizeLetter(props.letter)}`}>
+            <span className={`key ${props.type === "long" ? "long" : "small"} ${sanitizeLetter(props.letter)}`}>
                 {props.letter}
             </span>
             <span className={"description"}>

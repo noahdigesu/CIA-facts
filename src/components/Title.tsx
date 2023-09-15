@@ -5,7 +5,7 @@ import {Question} from "../types/types.tsx";
 
 type Props = {
     question: Question,
-    type: string
+    type: QUESTION_TYPE
 }
 
 function Title(props: Props) {

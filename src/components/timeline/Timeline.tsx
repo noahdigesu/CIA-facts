@@ -14,7 +14,8 @@ type Props = {
 function Timeline(props: Props) {
     return (
         <div id={"timeline"}>
-            <div id={"line"} style={{background: `linear-gradient(-270deg, #3B3C3E ${((props.currentQuestion / props.questions.length) * 100) - 10}%, #FFF ${((props.currentQuestion / props.questions.length) * 100) + 10}%, #FFF 100%)`}}/>
+            <div id={"line"}
+                 style={{background: `linear-gradient(-270deg, #3B3C3E ${((props.currentQuestion / props.questions.length) * 100) - 10}%, #FFF ${((props.currentQuestion / props.questions.length) * 100) + 10}%, #FFF 100%)`}}/>
             {props.questions.map((_question: unknown, i: number) => {
                     const isStarred = props.starredQuestions.some((question: Question) => {
                         return question.question === props.questions[i].question

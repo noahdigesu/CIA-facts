@@ -4,7 +4,7 @@ export const enum QUESTION_TYPE {
 }
 
 export const enum DIRECTION {
-    next= "next",
+    next = "next",
     previous = "previous"
 }
 

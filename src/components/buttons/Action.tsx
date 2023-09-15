@@ -5,6 +5,7 @@ import {Bookmark, Check, Star, X} from 'react-feather';
 
 type Props = {
     toggled: boolean,
+    onMouseDown?: () => void,
     icon: "bookmark" | "star" | "cross" | "check",
     hotkey: string
 }
@@ -21,7 +22,7 @@ function Action(props: Props) {
     }
 
     return (
-        <span className={`action-wrapper`} id={`${props.icon}-action-wrapper`}>
+        <span className={`action-wrapper`} id={`${props.icon}-action-wrapper`} onMouseDown={props.onMouseDown}>
             <motion.span className={`${props.icon} action ${props.toggled ? "toggled" : ""}`}
                          onMouseDown={animateAction}>
                 {props.icon === "star"
