@@ -1,0 +1,77 @@
+[
+  {
+    "question": "Unics",
+    "answer": "1969",
+    "author": "Bell Labs"
+  },
+  {
+    "question": "Unix v1",
+    "answer": "1971"
+  },
+  {
+    "question": "Unix v2",
+    "answer": "1972"
+  },
+  {
+    "question": "Unix v3",
+    "answer": "1973"
+  },
+  {
+    "question": "Unix v4",
+    "answer": "1973"
+  },
+  {
+    "question": "Unix v5",
+    "answer": "1974"
+  },
+  {
+    "question": "Unix v6",
+    "answer": "1975"
+  },
+  {
+    "question": "Unix v7",
+    "answer": "1979"
+  },
+  {
+    "question": "3BSD",
+    "answer": "1979",
+    "author": "Berkeley Software Distribution"
+  },
+  {
+    "question": "4.2BSD",
+    "answer": "1983"
+  },
+  {
+    "question": "System V",
+    "answer": "1983",
+    "author": "AT&T & Bell Labs"
+  },
+  {
+    "question": "4.3BSD",
+    "answer": "1986"
+  },
+  {
+    "question": "Unix Tahoe",
+    "answer": "1988"
+  },
+  {
+    "question": "System V Release 4 (SVR4)",
+    "answer": "1988"
+  },
+  {
+    "question": "4.3-Reno (BSD)",
+    "answer": "1990"
+  },
+  {
+    "question": "4.4BSD",
+    "answer": "1993"
+  },
+  {
+    "question": "Linux 1.0",
+    "answer": "1994"
+  },
+  {
+    "question": "386BSD",
+    "answer": "1994"
+  }
+]

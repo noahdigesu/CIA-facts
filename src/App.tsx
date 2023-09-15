@@ -5,28 +5,31 @@ import {useLocalStorage} from "@uidotdev/usehooks";
 import {animate, motion} from "framer-motion";
 
 import './App.scss'
-import QUESTIONS from './assets/q-a.json';
+import DEFAULT from './assets/default.json';
+import OS from './assets/oses.json';
 
 import Title from './components/Title.tsx';
-import Starred from './components/buttons/Starred.tsx';
-import Feedback from "./components/buttons/Feedback.tsx";
+import Action from './components/buttons/Action.tsx';
 import Arrow from "./components/buttons/Arrow.tsx";
 import Timeline from "./components/timeline/Timeline.tsx";
 
-import {DIRECTION, QUESTION_TYPE} from "./constants/constants.tsx";
+import {DIRECTION, QUESTION_TYPE, TAG} from "./constants/constants.tsx";
 import {Question} from "./types/types.tsx";
 import Keymap from "./components/pannels/keymap/Keymap.tsx";
 import Key from "./components/pannels/keymap/Key.tsx";
 
+const DECKS = { default: DEFAULT, os: OS }
+
 function App() {
     const [type, setType] = useState<QUESTION_TYPE>(QUESTION_TYPE.question);
-    const [questions, setQuestions] = useState<Question[]>(QUESTIONS);
+    const [questions, setQuestions] = useState<Question[]>(DECKS.default);
     const [isKeymapToggled, setIsKeymapToggled] = useState<boolean>(false);
+    const [isMenuToggled, setIsMenuToggled] = useState<boolean>(false);
+    const [filter, setFilter] = useState<string>("none");
     const [currentQuestion, setCurrentQuestion] = useLocalStorage<number>("currentQuestion", 0);
     const [starredQuestions, setStarredQuestions] = useLocalStorage<Question[]>("starredQuestions", []);
     const [passedQuestions, setPassedQuestions] = useLocalStorage<Question[]>("passedQuestions", []);
     const [failedQuestions, setFailedQuestions] = useLocalStorage<Question[]>("failedQuestions", []);
-    const [filter, setFilter] = useState<string>("none");
 
     // Next question
     useHotkeys('d', () => {
@@ -55,38 +58,40 @@ function App() {
     // Filter by failed
     useHotkeys('shift+f', () => toggleFailedFilter(), {preventDefault: true});
     // Show Keymap panel
-    useHotkeys('h', () => toggleKeymap());
+    useHotkeys('h', () => toggleKeymapPanel());
+    // Show Menu panel
+    useHotkeys('m', () => setIsMenuToggled(!isMenuToggled));
     // Close panel
     useHotkeys('esc', () => closePanel());
+    // ! Temp
+    useHotkeys('x', () => changeDeck());
 
-    function closePanel() {
-        if (isKeymapToggled) {
-            setIsKeymapToggled(false);
-        }
-        // todo questions deck
+    function changeDeck() {
+        setQuestions(DECKS.os);
     }
 
-    // todo improve
-    function toggleStarredFilter() {
-        if (filter !== "starred" && starredQuestions.length > 0) {
-            setQuestions(starredQuestions);
+    function closePanel() {
+        if (isKeymapToggled) setIsKeymapToggled(false);
+        if (isMenuToggled) setIsMenuToggled(false);
+    }
+
+    function toggleFilter(tag: string, questions: Question[]) {
+        if (filter !== tag && questions.length > 0) {
+            setQuestions(questions);
             setCurrentQuestion(0);
-            setFilter("starred");
-        } else if (filter === "starred") {
-            setQuestions(QUESTIONS);
+            setFilter(tag);
+        } else if (filter === tag) {
+            setQuestions(DECKS.default);
             setFilter("none");
         }
+    }
+
+    function toggleStarredFilter() {
+        toggleFilter(TAG.starred, starredQuestions);
     }
 
     function toggleFailedFilter() {
-        if (filter !== "failed" && failedQuestions.length > 0) {
-            setQuestions(failedQuestions);
-            setCurrentQuestion(0);
-            setFilter("failed");
-        } else if (filter === "failed") {
-            setQuestions(QUESTIONS);
-            setFilter("none");
-        }
+        toggleFilter(TAG.failed, failedQuestions);
     }
 
     function switchQuestion(switchType: DIRECTION) {
@@ -133,11 +138,6 @@ function App() {
                 && question.answer === questions[currentQuestion].answer
         });
     }
-
-    // todo
-    // function clearTag() {
-    //
-    // }
 
     function toggleStarred() {
         if (!isStarred()) {
@@ -198,11 +198,11 @@ function App() {
         setFailedQuestions([]);
         setPassedQuestions([]);
         setStarredQuestions([]);
-        setQuestions(QUESTIONS);
+        setQuestions(DECKS.default);
         setCurrentQuestion(0);
     }
 
-    function toggleKeymap() {
+    function toggleKeymapPanel() {
         setIsKeymapToggled(!isKeymapToggled);
         if (!isKeymapToggled) {
             animate(
@@ -233,6 +233,7 @@ function App() {
                 "#keymap-wrapper",
                 {
                     opacity: [1, 0],
+                    display: "none"
                 },
                 {
                     type: "spring",
@@ -254,7 +255,10 @@ function App() {
     return (
         <>
             <span onMouseDown={() => toggleStarred()}>
-                <Starred toggled={isStarred()}/>
+                <Action isToggled={isStarred()} icon={"star"} hotkey={"s"}/>
+            </span>
+            <span onMouseDown={() => setIsMenuToggled(!isMenuToggled)}>
+                <Action isToggled={isMenuToggled} icon={"menu"} hotkey={"m"}/>
             </span>
             <div className={"content-wrapper"}>
                 <div className={"content"}>
@@ -262,12 +266,10 @@ function App() {
                     {type === "answer" ? (
                         <div className={"feedback"}>
                             <span onMouseDown={() => toggleFailed()}>
-                                <Feedback type={"cross"}
-                                          enabled={isFailed()}/>
+                                <Action isToggled={isFailed()} icon={"cross"} hotkey={"f"}/>
                             </span>
                             <span onMouseDown={() => togglePassed()}>
-                                <Feedback type={"check"}
-                                          enabled={isPassed()}/>
+                                <Action isToggled={isPassed()} icon={"check"} hotkey={"c"}/>
                             </span>
                         </div>
                     ) : (<></>)}
@@ -289,7 +291,6 @@ function App() {
                       passedQuestions={passedQuestions}
                       starredQuestions={starredQuestions}
             />
-            {/*<Counter questionNumber={currentQuestion + 1} questionAmount={questions.length}/>*/}
             <div id={"help"}>
                 <Key letter={"h"} description={"Show help"} textPlacement={"left"}/>
             </div>
