@@ -5,10 +5,21 @@
   flex-direction: column;
 }
 
+.cross .checkmark.enabled {
+  border: 2px solid #FF4D4D;
+  color: #FF4D4D;
+}
+
+.check .checkmark.enabled {
+  border: 2px solid #13F287;
+  color: #13F287;
+}
+
 .checkmark {
+  color: #fff;
   cursor: pointer;
   font-size: 1em;
-  background-color: white;
+  border: 2px solid white;
   width: 3em;
   height: 3em;
   display: flex;
@@ -16,8 +27,8 @@
   align-items: center;
   border-radius: 100%;
   margin-top: .2em;
-  opacity: .6;
   user-select: none;
+  opacity: .6;
   transition: opacity .6s cubic-bezier(0.16, 1, 0.3, 1);
 
   &:hover {
@@ -25,6 +36,6 @@
   }
 
   &.enabled {
-    opacity: 1!important;
+    opacity: 1 !important;
   }
 }
