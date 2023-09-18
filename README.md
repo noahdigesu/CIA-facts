@@ -1,27 +1,19 @@
-# React + TypeScript + Vite
+![Static Badge](https://img.shields.io/badge/Version-Beta-orange) ![Static Badge](https://img.shields.io/badge/Bun-1.0.1-lightpink) ![Static Badge](https://img.shields.io/badge/Vite-4.4.5-yellow) ![Static Badge](https://img.shields.io/badge/React-18.2.0-lightblue) ![Static Badge](https://img.shields.io/badge/Typescript-5.0.2-blue)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# CIA Facts
+___
+An Anki alternative to help students from the Security and Network Engineering master's to remember Classical Internet Applications facts.
 
-Currently, two official plugins are available:
+## Functionalities
+- Marking a question as passed or failed.
+- Marking a question as starred.
+- Deck switching.
+- Persistent storage of tags.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-   parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-   },
-```
-
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+## Starting the webapp
+Should you want to launch the webapp locally, you can follow the steps below.
+If you only want to use the app, go to [cia.noahdigesu.com](https://cia.noahdigesu.com/).
+- Pull the repository (`git clone https://github.com/noahdigesu/CIA-facts.git`)
+- Visit the folder you just cloned (`cd ./CIA-facts`)
+- Run `npm run dev` (or `bun run dev` if you're using bun)
+- Visit the URL specified in the command's output.

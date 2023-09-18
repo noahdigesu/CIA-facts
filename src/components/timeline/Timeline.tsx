@@ -12,6 +12,7 @@ type Props = {
 }
 
 function Timeline(props: Props) {
+    // todo refactor map
     return (
         <div id={"timeline"}>
             <div id={"line"}

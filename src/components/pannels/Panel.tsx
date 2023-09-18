@@ -3,25 +3,27 @@ import {useHotkeys} from "react-hotkeys-hook";
 import {animate, motion} from "framer-motion";
 import Keymap from "./keymap/Keymap.tsx";
 import Deck from "./deck/Deck.tsx";
+import {useContext} from "react";
+import {PanelToggledContext} from "../../context/PanelContextProvider.tsx";
 
 type Props = {
-    toggled: boolean,
-    setToggled: (toggled: boolean) => void,
     type: "keymap" | "deck"
 }
 
 function Panel(props: Props) {
     useHotkeys('esc', () => close());
+    const toggled = useContext(PanelToggledContext);
 
     function togglePanel() {
-        !props.toggled ? animateIn() : animateOut();
-        props.setToggled(!props.toggled);
+        console.log("Panel", toggled);
+        !toggled ? animateIn() : animateOut();
+        toggled = !toggled;
     }
 
     function close() {
-        if (props.toggled) {
+        if (toggled) {
             animateOut();
-            props.setToggled(false)
+            toggled = false;
         }
     }
 

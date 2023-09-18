@@ -18,6 +18,8 @@ import {DIRECTION, QUESTION_TYPE, TAG} from "./constants/constants.tsx";
 import {Question} from "./types/types.tsx";
 import Key from "./components/pannels/keymap/Key.tsx";
 import Panel from "./components/pannels/Panel.tsx";
+import {ArrowLeft, ArrowRight} from "react-feather";
+import {PanelToggledContext} from "./context/PanelContextProvider.tsx";
 
 const DECKS = {default: DEFAULT, os: OS, web: WEB}
 
@@ -210,16 +212,24 @@ function App() {
         );
     }
 
+    function isFirstQuestion() {
+        return currentQuestion === 0 && type === QUESTION_TYPE.question;
+    }
+
+    function isLastAnswer() {
+        return currentQuestion === questions.length - 1 && type === QUESTION_TYPE.answer;
+    }
+
     return (
         <>
             <Action toggled={isStarred()}
                     onMouseDown={() => toggleStarred()}
                     icon={"star"} hotkey={"s"}/>
-
-            {/*Todo Show current chapter*/}
             <Action toggled={isDeckToggled}
                     onMouseDown={() => setIsDeckToggled(!isDeckToggled)}
                     icon={"bookmark"} hotkey={"m"}/>
+
+            {/*Todo Show current chapter*/}
 
             <div className={"content-wrapper"}>
                 <div className={"content"}>
@@ -237,13 +247,17 @@ function App() {
                 </div>
             </div>
 
-            {!(currentQuestion === 0 && type === QUESTION_TYPE.question) ? (
+            {!isFirstQuestion() ? (
                 <Arrow direction={DIRECTION.previous}
-                       onMouseDown={() => switchQuestion(DIRECTION.previous)}/>
+                       onMouseDown={() => switchQuestion(DIRECTION.previous)}>
+                    <ArrowLeft id={"arrow_previous"}/>
+                </Arrow>
             ) : (<></>)}
-            {!(currentQuestion === questions.length - 1 && type === QUESTION_TYPE.answer) ? (
+            {!isLastAnswer() ? (
                 <Arrow direction={DIRECTION.next}
-                       onMouseDown={() => switchQuestion(DIRECTION.next)}/>
+                       onMouseDown={() => switchQuestion(DIRECTION.next)}>
+                    <ArrowRight id={"arrow_next"}/>
+                </Arrow>
             ) : (<></>)}
 
             <Timeline questions={questions}
@@ -256,13 +270,15 @@ function App() {
             {/*Todo : tooltip on hover */}
             <div id={"help"} style={{cursor: "pointer"}}>
                 <Key letter={"h"}
-                     onMouseDown={() => setIsDeckToggled(!isDeckToggled)}/>
+                     onMouseDown={() => setIsKeymapToggled(!isKeymapToggled)}/>
             </div>
 
-            <Panel toggled={isDeckToggled}
-                   setToggled={setIsDeckToggled} type={"deck"}/>
-            <Panel toggled={isKeymapToggled}
-                   setToggled={setIsKeymapToggled} type={"keymap"}/>
+            <PanelToggledContext.Provider value={isDeckToggled}>
+                <Panel type={"deck"}/>
+            </PanelToggledContext.Provider>
+            <PanelToggledContext.Provider value={isKeymapToggled}>
+                <Panel type={"keymap"}/>
+            </PanelToggledContext.Provider>
         </>
     )
 }
