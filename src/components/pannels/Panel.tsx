@@ -3,27 +3,25 @@ import {useHotkeys} from "react-hotkeys-hook";
 import {animate, motion} from "framer-motion";
 import Keymap from "./keymap/Keymap.tsx";
 import Deck from "./deck/Deck.tsx";
-import {useContext} from "react";
-import {PanelToggledContext} from "../../context/PanelContextProvider.tsx";
 
 type Props = {
+    toggled: boolean,
+    setToggled: (toggled: boolean) => void,
     type: "keymap" | "deck"
 }
 
 function Panel(props: Props) {
     useHotkeys('esc', () => close());
-    const toggled = useContext(PanelToggledContext);
 
     function togglePanel() {
-        console.log("Panel", toggled);
-        !toggled ? animateIn() : animateOut();
-        toggled = !toggled;
+        !props.toggled ? animateIn() : animateOut();
+        props.setToggled(!props.toggled);
     }
 
     function close() {
-        if (toggled) {
+        if (props.toggled) {
             animateOut();
-            toggled = false;
+            props.setToggled(false);
         }
     }
 
@@ -69,12 +67,12 @@ function Panel(props: Props) {
     }
 
     return (
-        <motion.div id={`${props.type}-wrapper`} initial={{display: "none"}} exit={{display: "none"}}>
-            <div className={"panel"} id={props.type}>
+        <motion.div id={`${props.type}-wrapper`} initial={{display: "none"}}>
+            <div className={`panel`} id={props.type}>
                 {props.type === "keymap"
-                    ? <Keymap toggle={togglePanel}/>
-                    : <Deck toggle={togglePanel}/>
-                }
+                    && <Keymap toggle={togglePanel}/>}
+                {props.type === "deck"
+                    && <Deck toggle={togglePanel}/>}
             </div>
         </motion.div>
     );

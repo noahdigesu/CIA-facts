@@ -21,22 +21,27 @@ function Action(props: Props) {
         );
     }
 
+    let icon;
+    switch (props.icon) {
+        case "star":
+            icon = (<Star/>);
+            break;
+        case "bookmark":
+            icon = (<Bookmark/>);
+            break;
+        case "cross":
+            icon = (<X/>);
+            break;
+        case "check":
+            icon = (<Check/>);
+            break;
+    }
+
     return (
         <span className={`action-wrapper`} id={`${props.icon}-action-wrapper`} onMouseDown={props.onMouseDown}>
             <motion.span className={`${props.icon} action ${props.toggled ? "toggled" : ""}`}
                          onMouseDown={animateAction}>
-                {props.icon === "star"
-                    ? <Star/>
-                    : <></>}
-                {props.icon === "bookmark"
-                    ? <Bookmark/>
-                    : <></>}
-                {props.icon === "cross"
-                    ? <X/>
-                    : <></>}
-                {props.icon === "check"
-                    ? <Check/>
-                    : <></>}
+                {icon}
             </motion.span>
         </span>
     );

@@ -24,7 +24,7 @@
     color: #FFE073;
   }
 
-  &.distant {
+  &.past {
     color: #3B3C3E;
   }
 }
@@ -73,7 +73,7 @@
     border: 1px solid #FFE073;
   }
 
-  &.distant {
+  &.past {
     border: 1px solid #3B3C3E;
   }
 
@@ -82,7 +82,7 @@
     border-radius: 5px;
   }
 
-  &.current, &.previous, &.distant {
+  &.current, &.previous, &.past {
     border-radius: 100%;
   }
 
@@ -106,7 +106,7 @@
     }
   }
 
-  &.distant {
+  &.past {
     &.passed {
       border: 1px solid #367f5e !important;
     }

@@ -19,7 +19,6 @@ import {Question} from "./types/types.tsx";
 import Key from "./components/pannels/keymap/Key.tsx";
 import Panel from "./components/pannels/Panel.tsx";
 import {ArrowLeft, ArrowRight} from "react-feather";
-import {PanelToggledContext} from "./context/PanelContextProvider.tsx";
 
 const DECKS = {default: DEFAULT, os: OS, web: WEB}
 
@@ -234,7 +233,7 @@ function App() {
             <div className={"content-wrapper"}>
                 <div className={"content"}>
                     <Title question={questions[currentQuestion]} type={type}/>
-                    {type === QUESTION_TYPE.answer ? (
+                    {type === QUESTION_TYPE.answer && (
                         <div className={"feedback"}>
                             <Action toggled={isFailed()}
                                     onMouseDown={() => toggleFailed()}
@@ -243,22 +242,22 @@ function App() {
                                     onMouseDown={() => togglePassed()}
                                     icon={"check"} hotkey={"c"}/>
                         </div>
-                    ) : (<></>)}
+                    )}
                 </div>
             </div>
 
-            {!isFirstQuestion() ? (
+            {!isFirstQuestion() && (
                 <Arrow direction={DIRECTION.previous}
                        onMouseDown={() => switchQuestion(DIRECTION.previous)}>
                     <ArrowLeft id={"arrow_previous"}/>
                 </Arrow>
-            ) : (<></>)}
-            {!isLastAnswer() ? (
+            )}
+            {!isLastAnswer() && (
                 <Arrow direction={DIRECTION.next}
                        onMouseDown={() => switchQuestion(DIRECTION.next)}>
                     <ArrowRight id={"arrow_next"}/>
                 </Arrow>
-            ) : (<></>)}
+            )}
 
             <Timeline questions={questions}
                       currentQuestion={currentQuestion}
@@ -273,12 +272,8 @@ function App() {
                      onMouseDown={() => setIsKeymapToggled(!isKeymapToggled)}/>
             </div>
 
-            <PanelToggledContext.Provider value={isDeckToggled}>
-                <Panel type={"deck"}/>
-            </PanelToggledContext.Provider>
-            <PanelToggledContext.Provider value={isKeymapToggled}>
-                <Panel type={"keymap"}/>
-            </PanelToggledContext.Provider>
+            <Panel type={"deck"} toggled={isDeckToggled} setToggled={setIsDeckToggled}/>
+            <Panel type={"keymap"} toggled={isKeymapToggled} setToggled={setIsKeymapToggled}/>
         </>
     )
 }
