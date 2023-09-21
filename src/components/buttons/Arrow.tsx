@@ -1,12 +1,13 @@
 import "./Arrow.scss";
-
-import {ArrowLeft, ArrowRight} from 'react-feather';
 import {animate, motion} from "framer-motion";
 import {useHotkeys} from "react-hotkeys-hook";
 import {DIRECTION} from "../../constants/constants.tsx";
+import {ReactNode} from "react";
 
 type Props = {
-    direction: DIRECTION
+    direction: DIRECTION,
+    onMouseDown: () => void,
+    children?: ReactNode
 }
 
 function Arrow(props: Props) {
@@ -34,12 +35,10 @@ function Arrow(props: Props) {
     }
 
     return (
-        <div className={`arrow-wrapper ${props.direction}`}>
+        <div className={`arrow-wrapper ${props.direction}`} onMouseDown={props.onMouseDown}>
             <motion.span className={`arrow`}
                          onMouseDown={() => animateArrow(props.direction)}>
-                {props.direction === DIRECTION.previous ? (
-                    <ArrowLeft id={"arrow_previous"}/>
-                ) : <ArrowRight id={"arrow_next"}/>}
+                {props.children}
             </motion.span>
         </div>
     );

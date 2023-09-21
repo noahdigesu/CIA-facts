@@ -31,16 +31,27 @@
   svg {
     color: white;
     width: 1.2em;
+    transition: color .6s cubic-bezier(0.16, 1, 0.3, 1);
   }
-}
 
-.star,.bookmark {
-  &:hover {
-    background-color: white;
-    transition: background-color .6s cubic-bezier(0.16, 1, 0.3, 1);
+  &.star, &.bookmark {
+    &:hover {
+      background-color: white;
+      transition: background-color .6s cubic-bezier(0.16, 1, 0.3, 1);
 
-    svg {
-      color: #000;
+      svg {
+        color: #000;
+      }
+    }
+  }
+
+  &.cross, &.check {
+    opacity: .6;
+    transition: opacity .6s cubic-bezier(0.16, 1, 0.3, 1),
+    border .6s cubic-bezier(0.16, 1, 0.3, 1);
+
+    &:hover {
+      opacity: 1;
     }
   }
 }
@@ -55,20 +66,6 @@
 
   svg {
     color: #000;
-  }
-}
-
-.cross,.check {
-  opacity: .6;
-  transition: opacity .6s cubic-bezier(0.16, 1, 0.3, 1),
-    border .6s cubic-bezier(0.16, 1, 0.3, 1);
-
-  svg {
-    transition: color .6s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-
-  &:hover {
-    opacity: 1;
   }
 }
 

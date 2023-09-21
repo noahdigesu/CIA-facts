@@ -4,17 +4,18 @@ export const enum QUESTION_TYPE {
 }
 
 export const enum DIRECTION {
-    next= "next",
+    next = "next",
     previous = "previous"
 }
 
 export const enum STATE {
-    normal = "normal", previous = "previous", current = "current", distant = "distant"
+    normal = "normal", previous = "previous", current = "current", past = "past"
 }
 
 export const enum TAG {
     incomplete = "incomplete",
     passed = "passed",
     failed = "failed",
-    starred = "starred"
+    starred = "starred",
+    none = "none"
 }

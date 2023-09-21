@@ -13,10 +13,10 @@ function CheckPoint(props: Props) {
     return (
         <div className={"checkpoint-wrapper"}>
             <span className={`checkpoint ${props.state} ${props.tag} ${props.isLast ? "last" : ""}`}>
-                {props.isLast ? <Check/> : <></>}
+                {props.isLast && <Check/>}
             </span>
-            {props.state == "previous" ?
-                <p className={`date ${props.state} ${props.tag}`}>{props.previousDate}</p> : <></>}
+            {props.state == "previous" &&
+                <p className={`date ${props.state} ${props.tag}`}>{props.previousDate}</p>}
         </div>
     );
 }

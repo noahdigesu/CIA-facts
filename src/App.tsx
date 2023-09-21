@@ -16,22 +16,22 @@ import Timeline from "./components/timeline/Timeline.tsx";
 
 import {DIRECTION, QUESTION_TYPE, TAG} from "./constants/constants.tsx";
 import {Question} from "./types/types.tsx";
-import Keymap from "./components/pannels/keymap/Keymap.tsx";
 import Key from "./components/pannels/keymap/Key.tsx";
-import Deck from "./components/pannels/deck/Deck.tsx";
+import Panel from "./components/pannels/Panel.tsx";
+import {ArrowLeft, ArrowRight} from "react-feather";
 
 const DECKS = {default: DEFAULT, os: OS, web: WEB}
 
 function App() {
     const [type, setType] = useState<QUESTION_TYPE>(QUESTION_TYPE.question);
     const [questions, setQuestions] = useState<Question[]>(DECKS.default);
-    const [isDeckToggled, setIsDeckToggled] = useState<boolean>(false);
-    const [isKeymapToggled, setIsKeymapToggled] = useState<boolean>(false);
-    const [filter, setFilter] = useState<string>("none");
     const [currentQuestion, setCurrentQuestion] = useLocalStorage<number>("currentQuestion", 0);
     const [starredQuestions, setStarredQuestions] = useLocalStorage<Question[]>("starredQuestions", []);
     const [passedQuestions, setPassedQuestions] = useLocalStorage<Question[]>("passedQuestions", []);
     const [failedQuestions, setFailedQuestions] = useLocalStorage<Question[]>("failedQuestions", []);
+    const [isDeckToggled, setIsDeckToggled] = useState<boolean>(false);
+    const [isKeymapToggled, setIsKeymapToggled] = useState<boolean>(false);
+    const [filter, setFilter] = useState<string>(TAG.none);
 
     // Next question
     useHotkeys('d', () => {
@@ -59,10 +59,6 @@ function App() {
     useHotkeys('shift+s', () => toggleFilter(TAG.starred, starredQuestions), {preventDefault: true});
     // Filter by failed
     useHotkeys('shift+f', () => toggleFilter(TAG.failed, failedQuestions), {preventDefault: true});
-    // Toggle keymap panel
-    useHotkeys('h', () => setIsKeymapToggled(!isKeymapToggled));
-    // Toggle deck panel
-    useHotkeys('m', () => setIsDeckToggled(!isDeckToggled));
     // Change to default deck
     useHotkeys('1', () => changeDeck("default"));
     // Change to OS deck
@@ -71,6 +67,9 @@ function App() {
     useHotkeys('3', () => changeDeck("web"));
 
     function changeDeck(deck: string) {
+        setCurrentQuestion(0);
+        setType(QUESTION_TYPE.question);
+
         switch (deck) {
             case "default":
                 setQuestions(DECKS.default);
@@ -84,14 +83,14 @@ function App() {
         }
     }
 
-    function toggleFilter(tag: string, questions: Question[]) {
+    function toggleFilter(tag: TAG, questions: Question[]) {
         if (filter !== tag && questions.length > 0) {
             setQuestions(questions);
             setCurrentQuestion(0);
             setFilter(tag);
         } else if (filter === tag) {
             setQuestions(DECKS.default);
-            setFilter("none");
+            setFilter(TAG.none);
         }
     }
 
@@ -201,6 +200,7 @@ function App() {
         setStarredQuestions([]);
         setQuestions(DECKS.default);
         setCurrentQuestion(0);
+        setType(QUESTION_TYPE.question);
     }
 
     function animateContent(direction: DIRECTION) {
@@ -211,61 +211,71 @@ function App() {
         );
     }
 
+    function isFirstQuestion() {
+        return currentQuestion === 0 && type === QUESTION_TYPE.question;
+    }
+
+    function isLastAnswer() {
+        return currentQuestion === questions.length - 1 && type === QUESTION_TYPE.answer;
+    }
+
     return (
         <>
-            <span onMouseDown={() => toggleStarred()}>
-                <Action toggled={isStarred()} icon={"star"} hotkey={"s"}/>
-            </span>
-            <span onMouseDown={() => {
-                setIsDeckToggled(false);
-                setIsKeymapToggled(!isKeymapToggled)
-            }}>
-                {/*Show current chapter*/}
-                <Action toggled={isDeckToggled} icon={"bookmark"} hotkey={"m"}/>
-            </span>
+            <Action toggled={isStarred()}
+                    onMouseDown={() => toggleStarred()}
+                    icon={"star"} hotkey={"s"}/>
+            <Action toggled={isDeckToggled}
+                    onMouseDown={() => setIsDeckToggled(!isDeckToggled)}
+                    icon={"bookmark"} hotkey={"m"}/>
+
+            {/*Todo Show current chapter*/}
+
             <div className={"content-wrapper"}>
                 <div className={"content"}>
                     <Title question={questions[currentQuestion]} type={type}/>
-                    {type === "answer" ? (
+                    {type === QUESTION_TYPE.answer && (
                         <div className={"feedback"}>
-                            <span onMouseDown={() => toggleFailed()}>
-                                <Action toggled={isFailed()} icon={"cross"} hotkey={"f"}/>
-                            </span>
-                            <span onMouseDown={() => togglePassed()}>
-                                <Action toggled={isPassed()} icon={"check"} hotkey={"c"}/>
-                            </span>
+                            <Action toggled={isFailed()}
+                                    onMouseDown={() => toggleFailed()}
+                                    icon={"cross"} hotkey={"f"}/>
+                            <Action toggled={isPassed()}
+                                    onMouseDown={() => togglePassed()}
+                                    icon={"check"} hotkey={"c"}/>
                         </div>
-                    ) : (<></>)}
+                    )}
                 </div>
             </div>
-            {!(currentQuestion === 0 && type === QUESTION_TYPE.question) ? (
-                <span onMouseDown={() => switchQuestion(DIRECTION.previous)}>
-                    <Arrow direction={DIRECTION.previous}/>
-                </span>
-            ) : (<></>)}
-            {!(currentQuestion === questions.length - 1 && type === QUESTION_TYPE.answer) ? (
-                <span onMouseDown={() => switchQuestion(DIRECTION.next)}>
-                    <Arrow direction={DIRECTION.next}/>
-                </span>
-            ) : (<></>)}
+
+            {!isFirstQuestion() && (
+                <Arrow direction={DIRECTION.previous}
+                       onMouseDown={() => switchQuestion(DIRECTION.previous)}>
+                    <ArrowLeft id={"arrow_previous"}/>
+                </Arrow>
+            )}
+            {!isLastAnswer() && (
+                <Arrow direction={DIRECTION.next}
+                       onMouseDown={() => switchQuestion(DIRECTION.next)}>
+                    <ArrowRight id={"arrow_next"}/>
+                </Arrow>
+            )}
+
             <Timeline questions={questions}
                       currentQuestion={currentQuestion}
                       failedQuestions={failedQuestions}
                       passedQuestions={passedQuestions}
                       starredQuestions={starredQuestions}
             />
-            <div id={"help"} onClick={() => {
-                setIsKeymapToggled(false);
-                setIsDeckToggled(!isDeckToggled)
-            }} style={{cursor: "pointer"}}>
-                {/*Todo : tooltip on hover */}
-                <Key letter={"h"}/>
+
+            {/*Todo : tooltip on hover */}
+            <div id={"help"} style={{cursor: "pointer"}}>
+                <Key letter={"h"}
+                     onMouseDown={() => setIsKeymapToggled(!isKeymapToggled)}/>
             </div>
 
-            <Deck toggled={isDeckToggled}/>
-            <Keymap toggled={isKeymapToggled}/>
+            <Panel type={"deck"} toggled={isDeckToggled} setToggled={setIsDeckToggled}/>
+            <Panel type={"keymap"} toggled={isKeymapToggled} setToggled={setIsKeymapToggled}/>
         </>
     )
 }
 
-export default App
+export default App;
