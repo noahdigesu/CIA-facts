@@ -18,6 +18,7 @@ import Key from "./components/pannels/keymap/Key.tsx";
 import Panel from "./components/pannels/Panel.tsx";
 import {ArrowLeft, ArrowRight} from "react-feather";
 import Action from "./components/buttons/Action.tsx";
+import Timeline from "./components/timeline/Timeline.tsx";
 
 const D = {default: DEFAULT, os: OS, web: WEB}
 const DECKS: Question[] = D.default.map((deck, i) => ({
@@ -151,21 +152,21 @@ function App() {
     }
 
     function isFailed() {
-        return failedQuestions.some((id: number) => {
-            return id === questions[currentQuestion].id
-        });
+        return failedQuestions.some((id: number) =>
+            id === questions[currentQuestion].id
+        );
     }
 
     function isPassed() {
-        return passedQuestions.some((id: number) => {
-            return id === questions[currentQuestion].id
-        });
+        return passedQuestions.some((id: number) =>
+            id === questions[currentQuestion].id
+        );
     }
 
     function isStarred() {
-        return starredQuestions.some((id: number) => {
-            return id === questions[currentQuestion].id
-        });
+        return starredQuestions.some((id: number) =>
+            id === questions[currentQuestion].id
+        );
     }
 
     function addToPassed() {
@@ -251,6 +252,8 @@ function App() {
                     onMouseDown={() => setIsDeckToggled(!isDeckToggled)}
                     icon={"bookmark"} hotkey={"m"}/>
 
+            <span className="info">Filter : <span>{ filter }</span> <br/> Progress : {currentQuestion + 1} / {questions.length}</span>
+
             {/*Todo Show current chapter*/}
 
             <div className={"content-wrapper"}>
@@ -288,12 +291,12 @@ function App() {
                 </Arrow>
             )}
 
-            {/*<Timeline questions={questions}*/}
-            {/*          currentQuestion={currentQuestion}*/}
-            {/*          failedQuestions={failedQuestions}*/}
-            {/*          passedQuestions={passedQuestions}*/}
-            {/*          starredQuestions={starredQuestions}*/}
-            {/*/>*/}
+            <Timeline questions={questions}
+                      currentQuestion={currentQuestion}
+                      failedQuestions={failedQuestions}
+                      passedQuestions={passedQuestions}
+                      starredQuestions={starredQuestions}
+            />
 
             {/*Todo : tooltip on hover */}
             <div id={"help"} style={{cursor: "pointer"}}>

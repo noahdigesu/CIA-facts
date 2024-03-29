@@ -32,6 +32,7 @@ function Keymap(props: Props) {
             <div className={"keys"}>
                 <Key type={"long"} letter={"shift + s"} description={"Only show starred questions"}/>
                 <Key type={"long"} letter={"shift + f"} description={"Only show failed questions"}/>
+                <Key type={"long"} letter={"shift + c"} description={"Only show passed questions"}/>
             </div>
         </>
     );

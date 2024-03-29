@@ -30,3 +30,13 @@
   bottom: 52px;
   right: 12px;
 }
+
+.info {
+  font-family: "Satoshi", sans-serif;
+  color: white;
+  position: absolute;
+  left: 50%;
+  top: 25px;
+  transform: translateX(-50%);
+  text-align: center;
+}
