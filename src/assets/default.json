@@ -10,67 +10,79 @@
   {
     "question": "Message switching introduced",
     "answer": "1963",
-    "author": "Leonard Kleinrock"
+    "author": "Leonard Kleinrock",
+    "picture": "https://upload.wikimedia.org/wikipedia/commons/d/de/Kleinrock_headshot.png"
   },
   {
     "question": "Message blocks introduced",
     "answer": "1964",
-    "author": "Paul Baran"
+    "author": "Paul Baran",
+    "picture": "https://upload.wikimedia.org/wikipedia/commons/2/27/Paul_Baran.jpg"
   },
   {
     "question": "Term “Packet” invention",
     "answer": "1965-66",
-    "author": "Donald Davies"
+    "author": "Donald Davies",
+    "picture": "https://upload.wikimedia.org/wikipedia/en/d/df/Donald-Davies_Welsh_computer_scientist.jpg"
   },
   {
     "question": "ARPANET planning begins",
     "answer": "1966",
-    "author": "Joseph Licklider (IPTO)"
+    "author": "Joseph Licklider (IPTO)",
+    "picture": "https://upload.wikimedia.org/wikipedia/commons/6/66/J._C._R._Licklider.jpg"
   },
   {
     "question": "ARPANET development begins",
     "answer": "1967",
-    "author": "Larry Roberts (IPTO)"
+    "author": "Larry Roberts (IPTO)",
+    "picture": "https://upload.wikimedia.org/wikipedia/commons/e/e9/Larry_Roberts.jpg"
   },
   {
     "question": "Who suggested the use of IMPs and when",
     "answer": "1967",
-    "author": "Wesley Clark"
+    "author": "Wesley Clark",
+    "picture": "https://upload.wikimedia.org/wikipedia/en/thumb/0/06/Wesley_A_Clark_2009_Portrait.jpg/200px-Wesley_A_Clark_2009_Portrait.jpg"
   },
   {
     "question": "Mother of all Demos",
     "answer": "1968",
-    "author": "Douglas Engelbart"
+    "author": "Douglas Engelbart",
+    "picture": "https://static01.nyt.com/images/2013/07/04/business/engelbart-web/engelbart-web-superJumbo.jpg"
   },
   {
     "question": "First Internet connection using IMPs",
     "answer": "1969",
-    "author": "L. Kleinrock (UCLI) + D. Engelbart (SRI)"
+    "author": "L. Kleinrock (UCLA) + D. Engelbart (SRI)"
   },
   {
     "question": "Invention of RFCs",
     "answer": "1969",
-    "author": "Steve Crocker"
+    "author": "Steve Crocker",
+    "picture": "https://media.wired.com/photos/5932f3844cd5ce6f96c0be55/master/w_2560%2Cc_limit/steve-crocker.png"
   },
   {
     "question": "Invention of B",
     "answer": "1969",
-    "author": "Ken Thompson"
+    "author": "Ken Thompson",
+    "picture": "https://cdn.peteradamsphoto.com/wp-content/uploads/2018/11/03185650/faces.KenThompson20515.web_.jpg"
   },
   {
     "question": "Invention of C",
     "answer": "1969",
-    "author": "Dennis Ritchie"
+    "author": "Dennis Ritchie",
+    "picture": "https://spectrum.ieee.org/media-library/image.jpg?id=25565829"
   },
   {
     "question": "First ARPANET email & Invention of @",
     "answer": "1971",
-    "author": "Ray Tomlinson"
+    "author": "Ray Tomlinson",
+    "picture": "https://static01.nyt.com/images/2016/03/08/business/tomlinsonobit1/tomlinsonobit1-superJumbo.jpg"
   },
   {
     "question": "TCP/IP specified",
     "answer": "1974",
-    "author": "Vinton Cerf + Bob Kahn"
+    "author": "Vinton Cerf + Bob Kahn",
+    "picture": "https://northernvirginiamag.com/wp-content/uploads/2021/06/05.21.willreintzell.VintCerf-6.jpg"
   },
   {
     "question": "Unix integrates IMP (Unix == ARPANET)",
@@ -87,7 +99,8 @@
   {
     "question": "Sendmail",
     "answer": "1982",
-    "author": "Eric Allman"
+    "author": "Eric Allman",
+    "picture": "https://cdn.facesofopensource.com/wp-content/uploads/2016/04/23071207/faces.ericallman15503.web_.jpg"
   },
   {
     "question": "The great switch",
@@ -100,12 +113,14 @@
   {
     "question": "DNS specified",
     "answer": "1984",
-    "author": "Paul Mockapetris"
+    "author": "Paul Mockapetris",
+    "picture": "https://www.internethalloffame.org/wp-content/uploads/2012/04/Paul-Mockapetris.jpg"
   },
   {
     "question": "Invention of IRC",
     "answer": "1988",
-    "author": "Jarkko Oikarinen"
+    "author": "Jarkko Oikarinen",
+    "picture": "https://www.livinginternet.com/app/uploads/2020/10/oikarinen_jarkko.jpg"
   },
   {
     "question": "First Unix release free of all AT&T licenses",
@@ -115,7 +130,8 @@
   {
     "question": "Invention of the WWW",
     "answer": "1990-92",
-    "author": "Tim Berners-Lee"
+    "author": "Tim Berners-Lee",
+    "picture": "https://upload.wikimedia.org/wikipedia/commons/4/4e/Sir_Tim_Berners-Lee_%28cropped%29.jpg"
   },
   {
     "question": "Gopher (WWW alternative) released",
