@@ -14,8 +14,8 @@ function Keymap(props: Props) {
         <>
             <KeyCategory name={"Movements"}/>
             <div className={"keys"}>
-                <Key letter={"a"} description={"Go to the previous question"}/>
-                <Key letter={"d"} description={"Go to the next question"}/>
+                <Key letter={"←"} description={"Go to the previous question"}/>
+                <Key letter={"→"} description={"Go to the next question"}/>
                 <Key type={"long"} letter={"home"} description={"Go to the first question"}/>
                 <Key type={"long"} letter={"end"} description={"Go to the last question"}/>
             </div>

@@ -38,12 +38,12 @@ function App() {
     const [filter, setFilter] = useState<string>(TAG.none);
 
     // Next question
-    useHotkeys('d', () => {
+    useHotkeys('ArrowRight', () => {
         switchQuestion(DIRECTION.next);
         animateContent(DIRECTION.previous);
     });
     // Previous question
-    useHotkeys('a', () => {
+    useHotkeys('ArrowLeft', () => {
         switchQuestion(DIRECTION.previous);
         animateContent(DIRECTION.next);
     });
