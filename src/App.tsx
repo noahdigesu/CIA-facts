@@ -21,20 +21,23 @@ import Action from "./components/buttons/Action.tsx";
 import Timeline from "./components/timeline/Timeline.tsx";
 
 const D = {default: DEFAULT, os: OS, web: WEB}
-const DECKS: Question[] = D.default.map((deck, i) => ({
-    id: i,
-    ...deck
-}));
+
+function processQuestions(questions: Question[], deck: DECK): Question[] {
+    return questions.map((question: Question, i: number) => ({
+        id: `${deck}-${i}`,
+        ...question
+    }));
+}
 
 function App() {
     const [type, setType] = useState<QUESTION_TYPE>(QUESTION_TYPE.question);
-    const [questions, setQuestions] = useState<Question[]>(DECKS);
+    const [questions, setQuestions] = useState<Question[]>(processQuestions(D.default, DECK.default));
     const [currentQuestion, setCurrentQuestion] = useLocalStorage<number>("currentQuestion", 0);
     const [starredQuestions, setStarredQuestions] = useLocalStorage<number[]>("starredQuestions", []);
     const [passedQuestions, setPassedQuestions] = useLocalStorage<number[]>("passedQuestions", []);
     const [failedQuestions, setFailedQuestions] = useLocalStorage<number[]>("failedQuestions", []);
     const [filter, setFilter] = useState<string>(TAG.none);
-    const [chapter, setChapter] = useLocalStorage<string>("chapter", DECK.default);
+    const [deck, setDeck] = useLocalStorage<string>("deck", DECK.default);
     const [isDeckToggled, setIsDeckToggled] = useState<boolean>(false);
     const [isKeymapToggled, setIsKeymapToggled] = useState<boolean>(false);
 
@@ -67,28 +70,28 @@ function App() {
     // Filter by passed
     useHotkeys('shift+c', () => toggleFilter(TAG.passed), {preventDefault: true});
     // Change to default deck
-    useHotkeys('1', () => changeDeck("default"));
+    useHotkeys('1', () => changeDeck(DECK.default));
     // Change to OS deck
-    useHotkeys('2', () => changeDeck("os"));
+    useHotkeys('2', () => changeDeck(DECK.os));
     // Change to web deck
-    useHotkeys('3', () => changeDeck("web"));
+    useHotkeys('3', () => changeDeck(DECK.web));
 
-    function changeDeck(deck: string) {
-        return deck; // todo remove
-        // setCurrentQuestion(0);
-        // setType(QUESTION_TYPE.question);
-        //
-        // switch (deck) {
-        //     case "default":
-        //         setQuestions(DECKS.default);
-        //         break;
-        //     case "os":
-        //         setQuestions(DECKS.os);
-        //         break;
-        //     case "web":
-        //         setQuestions(DECKS.web);
-        //         break;
-        // }
+    function changeDeck(deck: DECK) {
+        setCurrentQuestion(0);
+        setType(QUESTION_TYPE.question);
+        setDeck(deck);
+
+        switch (deck) {
+            case DECK.default:
+                setQuestions(processQuestions(D.default, deck));
+                break;
+            case DECK.os:
+                setQuestions(processQuestions(D.os, deck));
+                break;
+            case DECK.web:
+                setQuestions(processQuestions(D.web, deck));
+                break;
+        }
     }
 
     function toggleFilter(newFilter: TAG) {
@@ -109,14 +112,14 @@ function App() {
 
     function resetFilter() {
         setFilter(TAG.none);
-        setQuestions(DECKS);
+        setQuestions(processQuestions(D.default, DECK.default));
         setCurrentQuestion(0);
         setType(QUESTION_TYPE.question);
     }
 
     function filterQuestions(newFilter: TAG, questionsToFilter: number[]) {
         if (newFilter !== filter && questionsToFilter.length > 0) {
-            const filteredQuestions = questions.filter(question =>
+            const filteredQuestions = questions.filter((question: Question) =>
                 questionsToFilter.includes(question.id)
             );
             setFilter(newFilter);
@@ -153,19 +156,19 @@ function App() {
     }
 
     function isFailed() {
-        return failedQuestions.some((id: number) =>
+        return failedQuestions.some((id: string) =>
             id === questions[currentQuestion].id
         );
     }
 
     function isPassed() {
-        return passedQuestions.some((id: number) =>
+        return passedQuestions.some((id: string) =>
             id === questions[currentQuestion].id
         );
     }
 
     function isStarred() {
-        return starredQuestions.some((id: number) =>
+        return starredQuestions.some((id: string) =>
             id === questions[currentQuestion].id
         );
     }
@@ -175,7 +178,7 @@ function App() {
     }
 
     function removeFromPassed() {
-        setPassedQuestions(passedQuestions.filter((id: number) => {
+        setPassedQuestions(passedQuestions.filter((id: string) => {
             return id !== questions[currentQuestion].id
         }));
     }
@@ -185,7 +188,7 @@ function App() {
     }
 
     function removeFromFailed() {
-        setFailedQuestions(failedQuestions.filter((id: number) => {
+        setFailedQuestions(failedQuestions.filter((id: string) => {
             return id !== questions[currentQuestion].id
         }));
     }
@@ -195,7 +198,7 @@ function App() {
     }
 
     function removeFromStarred() {
-        setStarredQuestions(starredQuestions.filter((id: number) => {
+        setStarredQuestions(starredQuestions.filter((id: string) => {
             return id !== questions[currentQuestion].id
         }));
     }
@@ -223,7 +226,7 @@ function App() {
         setFailedQuestions([]);
         setPassedQuestions([]);
         setStarredQuestions([]);
-        setQuestions(DECKS);
+        setQuestions(processQuestions(D.default, DECK.default));
         setCurrentQuestion(0);
         setType(QUESTION_TYPE.question);
     }
@@ -247,16 +250,17 @@ function App() {
     return (
         <>
             <div className="top-bar">
-                <Action toggled={isStarred()}
-                        onMouseDown={() => toggleStarred()}
-                        icon={"star"} hotkey={"s"}/>
-                <span className="info">Progress : { currentQuestion + 1 } / { questions.length } <br/> Filter : <span>{ filter }</span> <br/> Chapter : { chapter.toLowerCase() }</span>
                 <Action toggled={isDeckToggled}
                         onMouseDown={() => setIsDeckToggled(!isDeckToggled)}
                         icon={"bookmark"} hotkey={"m"}/>
+                <span className="info">Progress : {currentQuestion + 1} / {questions.length}
+                    <br/> Filter : <span>{filter}</span> <br/> Chapter : {deck.toLowerCase()}</span>
+                <Action toggled={isStarred()}
+                        onMouseDown={() => toggleStarred()}
+                        icon={"star"} hotkey={"s"}/>
             </div>
 
-            {/*Todo Show current chapter*/}
+            {/*Todo Show current deck*/}
 
             <div className={"content-wrapper"}>
                 <div className={"content"}>
