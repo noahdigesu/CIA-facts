@@ -252,7 +252,7 @@ function App() {
                     onMouseDown={() => setIsDeckToggled(!isDeckToggled)}
                     icon={"bookmark"} hotkey={"m"}/>
 
-            <span className="info">Filter : <span>{ filter }</span> <br/> Progress : {currentQuestion + 1} / {questions.length}</span>
+            <span className="info">Progress : {currentQuestion + 1} / {questions.length} <br/> Filter : <span>{ filter }</span></span>
 
             {/*Todo Show current chapter*/}
 
