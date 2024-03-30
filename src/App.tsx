@@ -12,7 +12,7 @@ import WEB from './assets/web.json';
 import Title from './components/Title.tsx';
 import Arrow from "./components/buttons/Arrow.tsx";
 
-import {DIRECTION, QUESTION_TYPE, TAG} from "./constants/constants.tsx";
+import {DECK, DIRECTION, QUESTION_TYPE, TAG} from "./constants/constants.tsx";
 import {Question} from "./types/types.tsx";
 import Key from "./components/pannels/keymap/Key.tsx";
 import Panel from "./components/pannels/Panel.tsx";
@@ -33,9 +33,10 @@ function App() {
     const [starredQuestions, setStarredQuestions] = useLocalStorage<number[]>("starredQuestions", []);
     const [passedQuestions, setPassedQuestions] = useLocalStorage<number[]>("passedQuestions", []);
     const [failedQuestions, setFailedQuestions] = useLocalStorage<number[]>("failedQuestions", []);
+    const [filter, setFilter] = useState<string>(TAG.none);
+    const [chapter, setChapter] = useLocalStorage<string>("chapter", DECK.default);
     const [isDeckToggled, setIsDeckToggled] = useState<boolean>(false);
     const [isKeymapToggled, setIsKeymapToggled] = useState<boolean>(false);
-    const [filter, setFilter] = useState<string>(TAG.none);
 
     // Next question
     useHotkeys('ArrowRight', () => {
@@ -245,14 +246,15 @@ function App() {
 
     return (
         <>
-            <Action toggled={isStarred()}
-                    onMouseDown={() => toggleStarred()}
-                    icon={"star"} hotkey={"s"}/>
-            <Action toggled={isDeckToggled}
-                    onMouseDown={() => setIsDeckToggled(!isDeckToggled)}
-                    icon={"bookmark"} hotkey={"m"}/>
-
-            <span className="info">Progress : {currentQuestion + 1} / {questions.length} <br/> Filter : <span>{ filter }</span></span>
+            <div className="top-bar">
+                <Action toggled={isStarred()}
+                        onMouseDown={() => toggleStarred()}
+                        icon={"star"} hotkey={"s"}/>
+                <span className="info">Progress : { currentQuestion + 1 } / { questions.length } <br/> Filter : <span>{ filter }</span> <br/> Chapter : { chapter.toLowerCase() }</span>
+                <Action toggled={isDeckToggled}
+                        onMouseDown={() => setIsDeckToggled(!isDeckToggled)}
+                        icon={"bookmark"} hotkey={"m"}/>
+            </div>
 
             {/*Todo Show current chapter*/}
 

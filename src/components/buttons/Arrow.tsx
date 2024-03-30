@@ -11,8 +11,8 @@ type Props = {
 }
 
 function Arrow(props: Props) {
-    useHotkeys('d', () => animateArrow(DIRECTION.next));
-    useHotkeys('a', () => animateArrow(DIRECTION.previous));
+    useHotkeys('ArrowRight', () => animateArrow(DIRECTION.next));
+    useHotkeys('ArrowLeft', () => animateArrow(DIRECTION.previous));
 
     function animateArrow(direction: DIRECTION) {
         // todo check if arrow exists
