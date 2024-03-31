@@ -1,7 +1,7 @@
 import "./Action.scss";
 import {animate, motion} from "framer-motion";
 import {useHotkeys} from 'react-hotkeys-hook';
-import {Bookmark, BookOpen, Check, Star, X} from 'react-feather';
+import {BookOpen, Check, Star, X} from 'react-feather';
 
 type Props = {
     toggled: boolean,
