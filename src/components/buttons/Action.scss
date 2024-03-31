@@ -5,18 +5,6 @@
   flex-direction: column;
 }
 
-#star-action-wrapper {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-}
-
-#bookmark-action-wrapper {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-}
-
 .action {
   border: 2px solid white;
   border-radius: 100%;
@@ -34,18 +22,7 @@
     transition: color .6s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
-  &.star, &.bookmark {
-    &:hover {
-      background-color: white;
-      transition: background-color .6s cubic-bezier(0.16, 1, 0.3, 1);
-
-      svg {
-        color: #000;
-      }
-    }
-  }
-
-  &.cross, &.check {
+  &.star, &.bookmark, &.cross, &.check {
     opacity: .6;
     transition: opacity .6s cubic-bezier(0.16, 1, 0.3, 1),
     border .6s cubic-bezier(0.16, 1, 0.3, 1);
@@ -56,17 +33,17 @@
   }
 }
 
-.star.toggled svg {
-  color: #EEC532 !important;
-  fill: #EEC532;
+.star.toggled {
+  opacity: 1;
+  border: 2px solid #ffdc62;
+
+  svg {
+    color: #ffdc62;
+  }
 }
 
 .bookmark.toggled {
-  background-color: #fff;
-
-  svg {
-    color: #000;
-  }
+  opacity: 1;
 }
 
 .cross.toggled {

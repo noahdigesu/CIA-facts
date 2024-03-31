@@ -19,3 +19,9 @@ export const enum TAG {
     starred = "starred",
     none = "none"
 }
+
+export const enum DECK {
+    default = "DEFAULT",
+    os = "OS",
+    web = "WEB"
+}

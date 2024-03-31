@@ -14,8 +14,8 @@ function Keymap(props: Props) {
         <>
             <KeyCategory name={"Movements"}/>
             <div className={"keys"}>
-                <Key letter={"a"} description={"Go to the previous question"}/>
-                <Key letter={"d"} description={"Go to the next question"}/>
+                <Key letter={"←"} description={"Go to the previous question"}/>
+                <Key letter={"→"} description={"Go to the next question"}/>
                 <Key type={"long"} letter={"home"} description={"Go to the first question"}/>
                 <Key type={"long"} letter={"end"} description={"Go to the last question"}/>
             </div>
@@ -32,6 +32,7 @@ function Keymap(props: Props) {
             <div className={"keys"}>
                 <Key type={"long"} letter={"shift + s"} description={"Only show starred questions"}/>
                 <Key type={"long"} letter={"shift + f"} description={"Only show failed questions"}/>
+                <Key type={"long"} letter={"shift + c"} description={"Only show passed questions"}/>
             </div>
         </>
     );

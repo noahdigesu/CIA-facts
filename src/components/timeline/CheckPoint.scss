@@ -5,7 +5,7 @@
 
 .date {
   font-family: "Satoshi", sans-serif;
-  color: white;
+  color: #72737a;
   width: max-content;
   position: absolute;
   bottom: -35px;
@@ -13,19 +13,19 @@
   transform: translate3d(-50%, 0, 0);
 
   &.passed {
-    color: #13F287;
+    color: #367f5e;
   }
 
   &.failed {
-    color: #FF4D4D;
+    color: #903c3c;
   }
 
   &.starred {
-    color: #FFE073;
+    color: #8d7f52;
   }
 
   &.past {
-    color: #3B3C3E;
+    color: #72737a;
   }
 }
 
@@ -57,8 +57,12 @@
   }
 
   // Tag
-  &.incomplete, &.previous {
+  &.incomplete {
     border: 1px solid #fff;
+  }
+
+  &.previous {
+    border: 1px solid #72737a;
   }
 
   &.passed {
@@ -74,7 +78,7 @@
   }
 
   &.past {
-    border: 1px solid #3B3C3E;
+    border: 1px solid #72737a;
   }
 
   // State
@@ -106,7 +110,7 @@
     }
   }
 
-  &.past {
+  &.past, &.previous {
     &.passed {
       border: 1px solid #367f5e !important;
     }
@@ -120,4 +124,3 @@
     }
   }
 }
-

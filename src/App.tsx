@@ -1,6 +1,6 @@
 import {useState} from 'react';
 import {useHotkeys} from 'react-hotkeys-hook';
-// @ts-ignore
+
 import {useLocalStorage} from "@uidotdev/usehooks";
 import {animate} from "framer-motion";
 
@@ -10,36 +10,45 @@ import OS from './assets/oses.json';
 import WEB from './assets/web.json';
 
 import Title from './components/Title.tsx';
-import Action from './components/buttons/Action.tsx';
 import Arrow from "./components/buttons/Arrow.tsx";
-import Timeline from "./components/timeline/Timeline.tsx";
 
-import {DIRECTION, QUESTION_TYPE, TAG} from "./constants/constants.tsx";
+import {DECK, DIRECTION, QUESTION_TYPE, TAG} from "./constants/constants.tsx";
 import {Question} from "./types/types.tsx";
 import Key from "./components/pannels/keymap/Key.tsx";
 import Panel from "./components/pannels/Panel.tsx";
 import {ArrowLeft, ArrowRight} from "react-feather";
+import Action from "./components/buttons/Action.tsx";
+import Timeline from "./components/timeline/Timeline.tsx";
 
-const DECKS = {default: DEFAULT, os: OS, web: WEB}
+const D = {default: DEFAULT, os: OS, web: WEB}
+const DEFAULT_QUESTIONS = processQuestions(D.default, DECK.default);
+
+function processQuestions(questions: Question[], deck: DECK): Question[] {
+    return questions.map((question: Question, i: number) => ({
+        id: `${deck}-${i}`,
+        ...question
+    }));
+}
 
 function App() {
     const [type, setType] = useState<QUESTION_TYPE>(QUESTION_TYPE.question);
-    const [questions, setQuestions] = useState<Question[]>(DECKS.default);
+    const [questions, setQuestions] = useState<Question[]>(DEFAULT_QUESTIONS);
     const [currentQuestion, setCurrentQuestion] = useLocalStorage<number>("currentQuestion", 0);
-    const [starredQuestions, setStarredQuestions] = useLocalStorage<Question[]>("starredQuestions", []);
-    const [passedQuestions, setPassedQuestions] = useLocalStorage<Question[]>("passedQuestions", []);
-    const [failedQuestions, setFailedQuestions] = useLocalStorage<Question[]>("failedQuestions", []);
+    const [starredQuestions, setStarredQuestions] = useLocalStorage<string[]>("starredQuestions", []);
+    const [passedQuestions, setPassedQuestions] = useLocalStorage<string[]>("passedQuestions", []);
+    const [failedQuestions, setFailedQuestions] = useLocalStorage<string[]>("failedQuestions", []);
+    const [filter, setFilter] = useState<TAG>(TAG.none);
+    const [deck, setDeck] = useLocalStorage<DECK>("deck", DECK.default);
     const [isDeckToggled, setIsDeckToggled] = useState<boolean>(false);
     const [isKeymapToggled, setIsKeymapToggled] = useState<boolean>(false);
-    const [filter, setFilter] = useState<string>(TAG.none);
 
     // Next question
-    useHotkeys('d', () => {
+    useHotkeys('ArrowRight', () => {
         switchQuestion(DIRECTION.next);
         animateContent(DIRECTION.previous);
     });
     // Previous question
-    useHotkeys('a', () => {
+    useHotkeys('ArrowLeft', () => {
         switchQuestion(DIRECTION.previous);
         animateContent(DIRECTION.next);
     });
@@ -56,60 +65,88 @@ function App() {
     // Go to last question
     useHotkeys('end', () => goToQuestion(questions.length - 1));
     // Filter by starred
-    useHotkeys('shift+s', () => toggleFilter(TAG.starred, starredQuestions), {preventDefault: true});
+    useHotkeys('shift+s', () => toggleFilter(TAG.starred), {preventDefault: true});
     // Filter by failed
-    useHotkeys('shift+f', () => toggleFilter(TAG.failed, failedQuestions), {preventDefault: true});
+    useHotkeys('shift+f', () => toggleFilter(TAG.failed), {preventDefault: true});
+    // Filter by passed
+    useHotkeys('shift+c', () => toggleFilter(TAG.passed), {preventDefault: true});
     // Change to default deck
-    useHotkeys('1', () => changeDeck("default"));
+    useHotkeys('1', () => changeDeck(DECK.default));
     // Change to OS deck
-    useHotkeys('2', () => changeDeck("os"));
+    useHotkeys('2', () => changeDeck(DECK.os));
     // Change to web deck
-    useHotkeys('3', () => changeDeck("web"));
+    useHotkeys('3', () => changeDeck(DECK.web));
 
-    function changeDeck(deck: string) {
+    function changeDeck(deck: DECK) {
         setCurrentQuestion(0);
         setType(QUESTION_TYPE.question);
+        setDeck(deck);
 
         switch (deck) {
-            case "default":
-                setQuestions(DECKS.default);
+            case DECK.default:
+                setQuestions(DEFAULT_QUESTIONS);
                 break;
-            case "os":
-                setQuestions(DECKS.os);
+            case DECK.os:
+                setQuestions(processQuestions(D.os, deck));
                 break;
-            case "web":
-                setQuestions(DECKS.web);
+            case DECK.web:
+                setQuestions(processQuestions(D.web, deck));
                 break;
         }
     }
 
-    function toggleFilter(tag: TAG, questions: Question[]) {
-        if (filter !== tag && questions.length > 0) {
-            setQuestions(questions);
-            setCurrentQuestion(0);
-            setFilter(tag);
-        } else if (filter === tag) {
-            setQuestions(DECKS.default);
-            setFilter(TAG.none);
+    function toggleFilter(newFilter: TAG) {
+        const questionsToFilter =
+            newFilter === TAG.failed ? failedQuestions :
+                newFilter === TAG.passed ? passedQuestions :
+                    starredQuestions;
+
+        if (questionsToFilter && questionsToFilter.length > 0) {
+            filterQuestions(newFilter, questionsToFilter);
         }
     }
 
-    function switchQuestion(switchType: DIRECTION) {
+    function resetFilter() {
+        setFilter(TAG.none);
+        setQuestions(DEFAULT_QUESTIONS);
+        setCurrentQuestion(0);
+        setType(QUESTION_TYPE.question);
+    }
+
+    function filterQuestions(newFilter: TAG, questionsToFilter: string[]) {
+        if (newFilter !== filter) {
+            if (questionsToFilter.length > 0) {
+                const filteredQuestions: Question[] = DEFAULT_QUESTIONS.filter((question: Question) =>
+                    question.id != null && questionsToFilter.includes(question.id)
+                );
+                setFilter(newFilter);
+                setQuestions(filteredQuestions);
+                setCurrentQuestion(0);
+                setType(QUESTION_TYPE.question);
+            }
+        } else {
+            resetFilter();
+        }
+    }
+
+    function switchQuestion(direction: DIRECTION) {
         // Check if we're switching from a question to an answer
-        const switchToAnswer = type === QUESTION_TYPE.question
-            && !(switchType === DIRECTION.previous && currentQuestion - 1 === -1);
+        const isSwitchToAnswer = type === QUESTION_TYPE.question
+            && !(direction === DIRECTION.previous && currentQuestion - 1 === -1);
+
         // Check if we're switching from an answer to a question
-        const switchToQuestion = type === QUESTION_TYPE.answer
-            && !(switchType === DIRECTION.next && currentQuestion + 1 === questions.length);
+        const isSwitchToQuestion = type === QUESTION_TYPE.answer
+            && !(direction === DIRECTION.next && currentQuestion + 1 === questions.length);
 
-        // Update the type based on the switchType
-        if (switchToAnswer) setType(QUESTION_TYPE.answer);
-        else if (switchToQuestion) setType(QUESTION_TYPE.question);
+        // Update the type based on the direction
+        if (isSwitchToAnswer) setType(QUESTION_TYPE.answer);
+        else if (isSwitchToQuestion) setType(QUESTION_TYPE.question);
 
-        // Update the currentQuestion based on the switchType
-        if (switchType === DIRECTION.previous && type === QUESTION_TYPE.question && currentQuestion > 0)
+        // Update the currentQuestion based on the direction
+        if (direction === DIRECTION.previous && type === QUESTION_TYPE.question && currentQuestion > 0)
             setCurrentQuestion(currentQuestion - 1);
-        if (switchType === DIRECTION.next && type === QUESTION_TYPE.answer && currentQuestion < questions.length - 1)
+
+        if (direction === DIRECTION.next && type === QUESTION_TYPE.answer && currentQuestion < questions.length - 1)
             setCurrentQuestion(currentQuestion + 1);
     }
 
@@ -118,87 +155,93 @@ function App() {
         setType(QUESTION_TYPE.question);
     }
 
-    function isStarred() {
-        return starredQuestions.some((question: Question) => {
-            return question.question === questions[currentQuestion].question
-                && question.answer === questions[currentQuestion].answer
-        });
-    }
-
     function isFailed() {
-        return failedQuestions.some((question: Question) => {
-            return question.question === questions[currentQuestion].question
-                && question.answer === questions[currentQuestion].answer
-        });
+        return failedQuestions.some((id: string) =>
+            id === questions[currentQuestion].id
+        );
     }
 
     function isPassed() {
-        return passedQuestions.some((question: Question) => {
-            return question.question === questions[currentQuestion].question
-                && question.answer === questions[currentQuestion].answer
-        });
+        return passedQuestions.some((id: string) =>
+            id === questions[currentQuestion].id
+        );
     }
 
-    function toggleStarred() {
-        if (!isStarred()) {
-            // Add to starred
-            setStarredQuestions([...starredQuestions, questions[currentQuestion]]);
-        } else {
-            // Remove from starred
-            setStarredQuestions(starredQuestions.filter((question: Question) => {
-                return question.question !== questions[currentQuestion].question
-                    && question.answer !== questions[currentQuestion].answer
-            }));
+    function isStarred() {
+        return starredQuestions.some((id: string) =>
+            id === questions[currentQuestion].id
+        );
+    }
+
+    function addToPassed() {
+        if (questions[currentQuestion].id != null) {
+            setPassedQuestions([
+                ...passedQuestions,
+                questions[currentQuestion].id
+            ] as string[]);
+        }
+    }
+
+    function removeFromPassed() {
+        setPassedQuestions(passedQuestions.filter((id: string) => {
+            return id !== questions[currentQuestion].id
+        }));
+    }
+
+    function addToFailed() {
+        if (questions[currentQuestion].id != null) {
+            setFailedQuestions([
+                ...failedQuestions,
+                questions[currentQuestion].id
+            ] as string[]);
+        }
+    }
+
+    function removeFromFailed() {
+        setFailedQuestions(failedQuestions.filter((id: string) => {
+            return id !== questions[currentQuestion].id
+        }));
+    }
+
+    function addToStarred() {
+        if (questions[currentQuestion].id != null) {
+            setStarredQuestions([
+                ...starredQuestions,
+                questions[currentQuestion].id
+            ] as string[]);
+        }
+    }
+
+    function removeFromStarred() {
+        setStarredQuestions(starredQuestions.filter((id: string) => {
+            return id !== questions[currentQuestion].id
+        }));
+    }
+
+    function togglePassed() {
+        if (type === QUESTION_TYPE.answer) {
+            removeFromFailed();
+            !isPassed() ? addToPassed() : removeFromPassed();
         }
     }
 
     function toggleFailed() {
         if (type === QUESTION_TYPE.answer) {
-            // Remove from passed (reset)
-            setPassedQuestions(passedQuestions.filter((question: Question) => {
-                return question.question !== questions[currentQuestion].question
-                    && question.answer !== questions[currentQuestion].answer
-            }));
-
-            if (!isFailed()) {
-                // Add to failed
-                setFailedQuestions([...failedQuestions, questions[currentQuestion]]);
-            } else {
-                // Remove from failed
-                setFailedQuestions(failedQuestions.filter((question: Question) => {
-                    return question.question !== questions[currentQuestion].question
-                        && question.answer !== questions[currentQuestion].answer
-                }));
-            }
+            removeFromPassed();
+            !isFailed() ? addToFailed() : removeFromFailed();
         }
     }
 
-    function togglePassed() {
-        if (type === QUESTION_TYPE.answer) {
-            // Remove from failed (reset)
-            setFailedQuestions(failedQuestions.filter((question: Question) => {
-                return question.question !== questions[currentQuestion].question
-                    && question.answer !== questions[currentQuestion].answer
-            }));
-
-            if (!isPassed()) {
-                // Add to passed
-                setPassedQuestions([...passedQuestions, questions[currentQuestion]]);
-            } else {
-                // Remove from passed
-                setPassedQuestions(passedQuestions.filter((question: Question) => {
-                    return question.question !== questions[currentQuestion].question
-                        && question.answer !== questions[currentQuestion].answer
-                }));
-            }
-        }
+    function toggleStarred() {
+        removeFromStarred();
+        !isStarred() ? addToStarred() : removeFromStarred();
     }
 
     function reset() {
         setFailedQuestions([]);
         setPassedQuestions([]);
         setStarredQuestions([]);
-        setQuestions(DECKS.default);
+        setQuestions(DEFAULT_QUESTIONS);
         setCurrentQuestion(0);
         setType(QUESTION_TYPE.question);
     }
@@ -221,14 +264,16 @@ function App() {
 
     return (
         <>
-            <Action toggled={isStarred()}
-                    onMouseDown={() => toggleStarred()}
-                    icon={"star"} hotkey={"s"}/>
-            <Action toggled={isDeckToggled}
-                    onMouseDown={() => setIsDeckToggled(!isDeckToggled)}
-                    icon={"bookmark"} hotkey={"m"}/>
-
-            {/*Todo Show current chapter*/}
+            <div className="top-bar">
+                <Action toggled={isDeckToggled}
+                        onMouseDown={() => setIsDeckToggled(!isDeckToggled)}
+                        icon={"bookmark"} hotkey={"m"}/>
+                <span className="info">Progress : {currentQuestion + 1} / {questions.length}
+                    <br/> Filter : <span>{filter}</span> <br/> Chapter : {deck.toLowerCase()}</span>
+                <Action toggled={isStarred()}
+                        onMouseDown={() => toggleStarred()}
+                        icon={"star"} hotkey={"s"}/>
+            </div>
 
             <div className={"content-wrapper"}>
                 <div className={"content"}>
@@ -248,13 +293,19 @@ function App() {
 
             {!isFirstQuestion() && (
                 <Arrow direction={DIRECTION.previous}
-                       onMouseDown={() => switchQuestion(DIRECTION.previous)}>
+                       onMouseDown={() => {
+                           switchQuestion(DIRECTION.previous);
+                           animateContent(DIRECTION.next);
+                       }}>
                     <ArrowLeft id={"arrow_previous"}/>
                 </Arrow>
             )}
             {!isLastAnswer() && (
                 <Arrow direction={DIRECTION.next}
-                       onMouseDown={() => switchQuestion(DIRECTION.next)}>
+                       onMouseDown={() => {
+                           switchQuestion(DIRECTION.next);
+                           animateContent(DIRECTION.previous);
+                       }}>
                     <ArrowRight id={"arrow_next"}/>
                 </Arrow>
             )}

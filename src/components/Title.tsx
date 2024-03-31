@@ -10,11 +10,13 @@ type Props = {
 
 function Title(props: Props) {
     return (
-        <div id={"title"}>
+        <div id="title">
             {props.type === QUESTION_TYPE.question ? (
                 <p>{props.question.question + "?"}</p>
             ) : <div>{props.question.answer}
-                <p id={"author"}>{props.question.author ? props.question.author : ""}</p>
+                {props.question.author && <p id="author">{props.question.author}</p>}
+                {props.question.picture &&
+                    <img id="picture" src={props.question.picture} alt={props.question.author}/>}
             </div>}
         </div>
     );

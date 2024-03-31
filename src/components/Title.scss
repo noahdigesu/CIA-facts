@@ -12,4 +12,10 @@
   #author {
     font-size: clamp(1rem, -0.875rem + 8.333vw, 2rem);
   }
+
+  #picture {
+    margin-top: .5em;
+    width: 3em;
+    filter: grayscale(1);
+  }
 }

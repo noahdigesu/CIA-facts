@@ -7,36 +7,34 @@ import {JSX} from "react/jsx-runtime";
 type Props = {
     questions: Question[],
     currentQuestion: number,
-    starredQuestions: Question[]
-    failedQuestions: Question[],
-    passedQuestions: Question[],
+    starredQuestions: string[]
+    failedQuestions: string[],
+    passedQuestions: string[],
 }
 
 function Timeline(props: Props) {
     const checkpoints: JSX.Element[] = [];
     {
-        props.questions.map((_question: unknown, i: number) => {
+        props.questions.map((_question: Question, i: number) => {
                 const isCurrent = i === props.currentQuestion;
                 const isPrevious = i === props.currentQuestion - 1;
                 const isPast = i < props.currentQuestion;
 
-                const isStarred = props.starredQuestions.some((question: Question) => {
-                    return question.question === props.questions[i].question
-                        && question.answer === props.questions[i].answer
+                const isStarred = props.starredQuestions.some((id: string) => {
+                    return id === _question.id
                 });
-                const isPassed = props.passedQuestions.some((question: Question) => {
-                    return question.question === props.questions[i].question
-                        && question.answer === props.questions[i].answer
-                });
-                const isFailed = props.failedQuestions.some((question: Question) => {
-                    return question.question === props.questions[i].question
-                        && question.answer === props.questions[i].answer
-                });
+                const isPassed = props.passedQuestions.some((id: string) =>
+                    id === _question.id
+                );
+                const isFailed = props.failedQuestions.some((id: string) =>
+                    id === _question.id
+                );
 
                 const state: STATE = (isCurrent ? STATE.current
                     : isPrevious ? STATE.previous
                         : isPast ? STATE.past
                             : STATE.normal);
+
                 const tag: TAG = (isStarred ? TAG.starred
                     : isPassed ? TAG.passed
                         : isFailed ? TAG.failed
@@ -51,7 +49,7 @@ function Timeline(props: Props) {
                         />
                     </span>));
             }
-        )
+        );
     }
 
     // todo refactor map
