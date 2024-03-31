@@ -21,6 +21,7 @@ import Action from "./components/buttons/Action.tsx";
 import Timeline from "./components/timeline/Timeline.tsx";
 
 const D = {default: DEFAULT, os: OS, web: WEB}
+const DEFAULT_QUESTIONS = processQuestions(D.default, DECK.default);
 
 function processQuestions(questions: Question[], deck: DECK): Question[] {
     return questions.map((question: Question, i: number) => ({
@@ -31,13 +32,13 @@ function processQuestions(questions: Question[], deck: DECK): Question[] {
 
 function App() {
     const [type, setType] = useState<QUESTION_TYPE>(QUESTION_TYPE.question);
-    const [questions, setQuestions] = useState<Question[]>(processQuestions(D.default, DECK.default));
+    const [questions, setQuestions] = useState<Question[]>(DEFAULT_QUESTIONS);
     const [currentQuestion, setCurrentQuestion] = useLocalStorage<number>("currentQuestion", 0);
     const [starredQuestions, setStarredQuestions] = useLocalStorage<string[]>("starredQuestions", []);
     const [passedQuestions, setPassedQuestions] = useLocalStorage<string[]>("passedQuestions", []);
     const [failedQuestions, setFailedQuestions] = useLocalStorage<string[]>("failedQuestions", []);
-    const [filter, setFilter] = useState<string>(TAG.none);
-    const [deck, setDeck] = useLocalStorage<string>("deck", DECK.default);
+    const [filter, setFilter] = useState<TAG>(TAG.none);
+    const [deck, setDeck] = useLocalStorage<DECK>("deck", DECK.default);
     const [isDeckToggled, setIsDeckToggled] = useState<boolean>(false);
     const [isKeymapToggled, setIsKeymapToggled] = useState<boolean>(false);
 
@@ -83,7 +84,7 @@ function App() {
 
         switch (deck) {
             case DECK.default:
-                setQuestions(processQuestions(D.default, deck));
+                setQuestions(DEFAULT_QUESTIONS);
                 break;
             case DECK.os:
                 setQuestions(processQuestions(D.os, deck));
@@ -95,39 +96,36 @@ function App() {
     }
 
     function toggleFilter(newFilter: TAG) {
-        resetFilter();
+        const questionsToFilter =
+            newFilter === TAG.failed ? failedQuestions :
+                newFilter === TAG.passed ? passedQuestions :
+                    starredQuestions;
 
-        switch (newFilter) {
-            case TAG.failed:
-                filterQuestions(newFilter, failedQuestions);
-                break;
-            case TAG.passed:
-                filterQuestions(newFilter, passedQuestions);
-                break;
-            case TAG.starred:
-                filterQuestions(newFilter, starredQuestions);
-                break;
+        if (questionsToFilter && questionsToFilter.length > 0) {
+            filterQuestions(newFilter, questionsToFilter);
         }
     }
 
     function resetFilter() {
         setFilter(TAG.none);
-        setQuestions(processQuestions(D.default, DECK.default));
+        setQuestions(DEFAULT_QUESTIONS);
         setCurrentQuestion(0);
         setType(QUESTION_TYPE.question);
     }
 
     function filterQuestions(newFilter: TAG, questionsToFilter: string[]) {
-        if (newFilter !== filter && questionsToFilter.length > 0) {
-            const filteredQuestions = questions.filter((question: Question) => {
-                if (question.id != null) {
-                    return questionsToFilter.includes(question.id)
-                }
-            });
-            setFilter(newFilter);
-            setQuestions(filteredQuestions);
-            setCurrentQuestion(0);
-            setType(QUESTION_TYPE.question);
+        if (newFilter !== filter) {
+            if (questionsToFilter.length > 0) {
+                const filteredQuestions: Question[] = DEFAULT_QUESTIONS.filter((question: Question) =>
+                    question.id != null && questionsToFilter.includes(question.id)
+                );
+                setFilter(newFilter);
+                setQuestions(filteredQuestions);
+                setCurrentQuestion(0);
+                setType(QUESTION_TYPE.question);
+            }
+        } else {
+            resetFilter();
         }
     }
 
@@ -243,7 +241,7 @@ function App() {
         setFailedQuestions([]);
         setPassedQuestions([]);
         setStarredQuestions([]);
-        setQuestions(processQuestions(D.default, DECK.default));
+        setQuestions(DEFAULT_QUESTIONS);
         setCurrentQuestion(0);
         setType(QUESTION_TYPE.question);
     }
@@ -276,8 +274,6 @@ function App() {
                         onMouseDown={() => toggleStarred()}
                         icon={"star"} hotkey={"s"}/>
             </div>
-
-            {/*Todo Show current deck*/}
 
             <div className={"content-wrapper"}>
                 <div className={"content"}>
