@@ -267,7 +267,7 @@ function App() {
             <div className="top-bar">
                 <Action toggled={isDeckToggled}
                         onMouseDown={() => setIsDeckToggled(!isDeckToggled)}
-                        icon={"bookmark"} hotkey={"m"}/>
+                        icon={"book-open"} hotkey={"m"}/>
                 <span className="info">Progress : {currentQuestion + 1} / {questions.length}
                     <br/> Filter : <span>{filter}</span> <br/> Chapter : {deck.toLowerCase()}</span>
                 <Action toggled={isStarred()}
