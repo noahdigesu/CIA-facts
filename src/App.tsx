@@ -176,7 +176,9 @@ function App() {
     }
 
     function addToPassed() {
-        setPassedQuestions([...passedQuestions, questions[currentQuestion].id]);
+        if (questions[currentQuestion].id != null) {
+            setPassedQuestions([...passedQuestions, questions[currentQuestion].id]);
+        }
     }
 
     function removeFromPassed() {
@@ -186,7 +188,9 @@ function App() {
     }
 
     function addToFailed() {
-        setFailedQuestions([...failedQuestions, questions[currentQuestion].id]);
+        if (questions[currentQuestion].id != null) {
+            setFailedQuestions([...failedQuestions, questions[currentQuestion].id]);
+        }
     }
 
     function removeFromFailed() {
@@ -196,7 +200,9 @@ function App() {
     }
 
     function addToStarred() {
-        setStarredQuestions([...starredQuestions, questions[currentQuestion].id]);
+        if (questions[currentQuestion].id != null) {
+            setStarredQuestions([...starredQuestions, questions[currentQuestion].id]);
+        }
     }
 
     function removeFromStarred() {
