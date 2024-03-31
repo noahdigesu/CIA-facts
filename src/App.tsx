@@ -1,6 +1,6 @@
 import {useState} from 'react';
 import {useHotkeys} from 'react-hotkeys-hook';
-// @ts-ignore
+
 import {useLocalStorage} from "@uidotdev/usehooks";
 import {animate} from "framer-motion";
 
@@ -177,7 +177,10 @@ function App() {
 
     function addToPassed() {
         if (questions[currentQuestion].id != null) {
-            setPassedQuestions([...passedQuestions, questions[currentQuestion].id]);
+            setPassedQuestions([
+                ...passedQuestions,
+                questions[currentQuestion].id
+            ] as string[]);
         }
     }
 
@@ -189,7 +192,10 @@ function App() {
 
     function addToFailed() {
         if (questions[currentQuestion].id != null) {
-            setFailedQuestions([...failedQuestions, questions[currentQuestion].id]);
+            setFailedQuestions([
+                ...failedQuestions,
+                questions[currentQuestion].id
+            ] as string[]);
         }
     }
 
@@ -201,7 +207,10 @@ function App() {
 
     function addToStarred() {
         if (questions[currentQuestion].id != null) {
-            setStarredQuestions([...starredQuestions, questions[currentQuestion].id]);
+            setStarredQuestions([
+                ...starredQuestions,
+                questions[currentQuestion].id
+            ] as string[]);
         }
     }
 
