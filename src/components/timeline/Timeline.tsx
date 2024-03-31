@@ -7,9 +7,9 @@ import {JSX} from "react/jsx-runtime";
 type Props = {
     questions: Question[],
     currentQuestion: number,
-    starredQuestions: number[]
-    failedQuestions: number[],
-    passedQuestions: number[],
+    starredQuestions: string[]
+    failedQuestions: string[],
+    passedQuestions: string[],
 }
 
 function Timeline(props: Props) {
@@ -20,13 +20,13 @@ function Timeline(props: Props) {
                 const isPrevious = i === props.currentQuestion - 1;
                 const isPast = i < props.currentQuestion;
 
-                const isStarred = props.starredQuestions.some((id: number) =>
+                const isStarred = props.starredQuestions.some((id: string) => {
+                    return id === _question.id
+                });
+                const isPassed = props.passedQuestions.some((id: string) =>
                     id === _question.id
                 );
-                const isPassed = props.passedQuestions.some((id: number) =>
-                    id === _question.id
-                );
-                const isFailed = props.failedQuestions.some((id: number) =>
+                const isFailed = props.failedQuestions.some((id: string) =>
                     id === _question.id
                 );
 

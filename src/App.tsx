@@ -33,9 +33,9 @@ function App() {
     const [type, setType] = useState<QUESTION_TYPE>(QUESTION_TYPE.question);
     const [questions, setQuestions] = useState<Question[]>(processQuestions(D.default, DECK.default));
     const [currentQuestion, setCurrentQuestion] = useLocalStorage<number>("currentQuestion", 0);
-    const [starredQuestions, setStarredQuestions] = useLocalStorage<number[]>("starredQuestions", []);
-    const [passedQuestions, setPassedQuestions] = useLocalStorage<number[]>("passedQuestions", []);
-    const [failedQuestions, setFailedQuestions] = useLocalStorage<number[]>("failedQuestions", []);
+    const [starredQuestions, setStarredQuestions] = useLocalStorage<string[]>("starredQuestions", []);
+    const [passedQuestions, setPassedQuestions] = useLocalStorage<string[]>("passedQuestions", []);
+    const [failedQuestions, setFailedQuestions] = useLocalStorage<string[]>("failedQuestions", []);
     const [filter, setFilter] = useState<string>(TAG.none);
     const [deck, setDeck] = useLocalStorage<string>("deck", DECK.default);
     const [isDeckToggled, setIsDeckToggled] = useState<boolean>(false);
