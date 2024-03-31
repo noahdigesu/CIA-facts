@@ -22,7 +22,7 @@
     transition: color .6s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
-  &.star, &.bookmark, &.cross, &.check {
+  &.star, &.book-open, &.cross, &.check {
     opacity: .6;
     transition: opacity .6s cubic-bezier(0.16, 1, 0.3, 1),
     border .6s cubic-bezier(0.16, 1, 0.3, 1);
@@ -42,7 +42,7 @@
   }
 }
 
-.bookmark.toggled {
+.book-open.toggled {
   opacity: 1;
 }
 
