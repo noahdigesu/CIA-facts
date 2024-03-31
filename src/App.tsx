@@ -117,10 +117,10 @@ function App() {
         setType(QUESTION_TYPE.question);
     }
 
-    function filterQuestions(newFilter: TAG, questionsToFilter: number[]) {
+    function filterQuestions(newFilter: TAG, questionsToFilter: string[]) {
         if (newFilter !== filter && questionsToFilter.length > 0) {
             const filteredQuestions = questions.filter((question: Question) =>
-                questionsToFilter.includes(question.id)
+                question.id != null && questionsToFilter.includes(question.id)
             );
             setFilter(newFilter);
             setQuestions(filteredQuestions);
