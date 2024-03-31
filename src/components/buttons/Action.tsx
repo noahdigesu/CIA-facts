@@ -1,11 +1,11 @@
 import "./Action.scss";
 import {animate, motion} from "framer-motion";
 import {useHotkeys} from 'react-hotkeys-hook';
-import {Bookmark, Check, Star, X} from 'react-feather';
+import {BookOpen, Check, Star, X} from 'react-feather';
 
 type Props = {
     toggled: boolean,
-    icon: "bookmark" | "star" | "cross" | "check",
+    icon: "book-open" | "star" | "cross" | "check",
     hotkey: string,
     onMouseDown?: () => void
 }
@@ -26,8 +26,8 @@ function Action(props: Props) {
         case "star":
             icon = (<Star/>);
             break;
-        case "bookmark":
-            icon = (<Bookmark/>);
+        case "book-open":
+            icon = (<BookOpen/>);
             break;
         case "cross":
             icon = (<X/>);
